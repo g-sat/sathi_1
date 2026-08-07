@@ -1,98 +1,81 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useEffect } from 'react';
+import { Text, View } from 'react-native';
+import { router } from 'expo-router';
+import Animated, { ZoomIn } from 'react-native-reanimated';
+import { HeartPulse, Stethoscope, UserRound } from 'lucide-react-native';
+import { ScreenScaffold } from '@/components/ui/ScreenScaffold';
+import { Card } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
+import { Reveal } from '@/components/ui/Reveal';
+import { GradientIconTile } from '@/components/ui/GradientIconTile';
+import { useSession } from '@/context/SessionContext';
 
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+export default function Landing() {
+  const { session, isLoading } = useSession();
 
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
+  useEffect(() => {
+    if (isLoading) return;
+    if (session?.role === 'chw') router.replace('/chw/dashboard');
+    else if (session?.role === 'patient') router.replace('/patient/home');
+  }, [session, isLoading]);
+
   return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
+    <ScreenScaffold contentClassName="pt-8">
+      <Animated.View entering={ZoomIn.duration(500)} className="items-center gap-3">
+        <GradientIconTile colors={['#3FA2FF', '#0055D4']} size={72}>
+          <HeartPulse size={34} color="#FFFFFF" strokeWidth={2.2} />
+        </GradientIconTile>
+        <Text className="mt-1 font-display text-[2.75rem] leading-[3rem] tracking-tight text-ink-800">
+          Sathi
+        </Text>
+        <Text className="max-w-xs text-center font-body text-[15px] leading-5 text-ink-700/70">
+          A culturally-adapted Diabetes Prevention Program for South Asian communities
+        </Text>
+      </Animated.View>
+
+      <View className="mt-11 gap-4">
+        <Reveal index={0}>
+          <Card className="gap-0">
+            <View className="flex-row items-center gap-3.5">
+              <GradientIconTile colors={['#5CC9DC', '#1E8494']} size={52}>
+                <Stethoscope size={24} color="#FFFFFF" strokeWidth={2.2} />
+              </GradientIconTile>
+              <View className="flex-1">
+                <Text className="font-display text-lg text-ink-800">I'm a Doctor / CHW</Text>
+                <Text className="mt-0.5 font-body text-[13px] leading-4 text-ink-700/65">
+                  Onboard patients, review AI plans, monitor progress
+                </Text>
+              </View>
+            </View>
+            <View className="mt-4">
+              <Button variant="teal" size="lg" onPress={() => router.push('/chw/login')} fullWidth>
+                Continue as CHW
+              </Button>
+            </View>
+          </Card>
+        </Reveal>
+
+        <Reveal index={1}>
+          <Card className="gap-0">
+            <View className="flex-row items-center gap-3.5">
+              <GradientIconTile colors={['#FFB648', '#D97706']} size={52}>
+                <UserRound size={24} color="#FFFFFF" strokeWidth={2.2} />
+              </GradientIconTile>
+              <View className="flex-1">
+                <Text className="font-display text-lg text-ink-800">I'm a Patient</Text>
+                <Text className="mt-0.5 font-body text-[13px] leading-4 text-ink-700/65">
+                  View your plan, track daily progress, get nudges
+                </Text>
+              </View>
+            </View>
+            <View className="mt-4">
+              <Button variant="mustard" size="lg" onPress={() => router.push('/patient/login')} fullWidth>
+                Continue as Patient
+              </Button>
+            </View>
+          </Card>
+        </Reveal>
+      </View>
+    </ScreenScaffold>
   );
 }
-
-export default function HomeScreen() {
-  return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
-
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
-
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
-
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
-  },
-  safeArea: {
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
-  },
-  heroSection: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
-  },
-  title: {
-    textAlign: 'center',
-  },
-  code: {
-    textTransform: 'uppercase',
-  },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
-  },
-});
