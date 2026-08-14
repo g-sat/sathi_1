@@ -86,7 +86,7 @@ export default function ReviewReport() {
   if (loading || !patient) {
     return (
       <ScreenScaffold contentClassName="flex-1 items-center justify-center">
-        <ActivityIndicator color="#30B0C7" />
+        <ActivityIndicator color="#22D3EE" />
       </ScreenScaffold>
     );
   }
@@ -110,7 +110,7 @@ export default function ReviewReport() {
           <AIThinking />
         ) : (
           <View className="items-center gap-3 rounded-2xl border border-dashed border-cream-300 p-8">
-            <Sparkles size={22} color="#1C1C1E" />
+            <Sparkles size={22} color="#F2F2F5" />
             <Text className="text-center font-body text-sm text-ink-700/70">
               No plan generated yet for {patient.name}.
             </Text>
@@ -140,7 +140,7 @@ export default function ReviewReport() {
                   variant="ghost"
                   onPress={handleGenerate}
                   loading={generating}
-                  icon={<RefreshCcw size={16} color="#1C1C1E" />}
+                  icon={<RefreshCcw size={16} color="#F2F2F5" />}
                   fullWidth
                 >
                   Regenerate all
@@ -159,7 +159,7 @@ export default function ReviewReport() {
             </View>
           ) : (
             <View className="items-center gap-2 rounded-2xl bg-teal-50 p-4">
-              <CheckCircle2 size={20} color="#238999" />
+              <CheckCircle2 size={20} color="#67E8F9" />
               <Text className="text-center font-body-medium text-sm text-teal-700">
                 Published — {patient.name} can now see this plan in their app.
               </Text>

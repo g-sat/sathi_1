@@ -48,7 +48,7 @@ export default function PatientMonitor() {
         showBack
       />
       <ErrorBanner message={error} />
-      {loading ? <ActivityIndicator color="#30B0C7" /> : <LogHistoryList logs={logs} />}
+      {loading ? <ActivityIndicator color="#22D3EE" /> : <LogHistoryList logs={logs} />}
     </ScreenScaffold>
   );
 }

@@ -12,9 +12,9 @@ import { DevCodeHint } from '@/components/ui/DevCodeHint';
 import { useSession } from '@/context/SessionContext';
 import { api } from '@/lib/api';
 
-export default function PatientVerify() {
+export default function ChwVerify() {
   const { email: emailParam, devCode: devCodeParam } = useLocalSearchParams<{ email: string; devCode?: string }>();
-  const { signInPatient } = useSession();
+  const { signInChw } = useSession();
   const [code, setCode] = useState(devCodeParam || '');
   const [loading, setLoading] = useState(false);
   const [resending, setResending] = useState(false);
@@ -32,10 +32,10 @@ export default function PatientVerify() {
     }
     setLoading(true);
     try {
-      const { patient, token } = await api.verifyEmail('patient', email, code.trim());
-      if (patient && token) {
-        await signInPatient(patient, token);
-        router.replace('/patient/home');
+      const { user, token } = await api.verifyEmail('chw', email, code.trim());
+      if (user && token) {
+        await signInChw(user, token);
+        router.replace('/chw/dashboard');
       }
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Something went wrong.');
@@ -48,7 +48,7 @@ export default function PatientVerify() {
     setError(null);
     setResending(true);
     try {
-      const { devCode: freshCode } = await api.resendCode('patient', email);
+      const { devCode: freshCode } = await api.resendCode('chw', email);
       if (freshCode) {
         setDevCode(freshCode);
         setCode(freshCode);
@@ -64,11 +64,11 @@ export default function PatientVerify() {
 
   return (
     <ScreenScaffold contentClassName="pt-6">
-      <ScreenHeader eyebrow="Verify your email" title="Check your inbox" showBack fallbackHref="/patient/login" />
+      <ScreenHeader eyebrow="Verify your email" title="Check your inbox" showBack fallbackHref="/chw/login" />
       <Card className="mt-6 gap-4">
         <View className="items-center gap-2 py-2">
           <View className="h-14 w-14 items-center justify-center rounded-full bg-teal-50">
-            <MailCheck size={26} color="#0A84FF" />
+            <MailCheck size={26} color="#8B5CF6" />
           </View>
           <Text className="text-center font-body text-sm text-ink-700/80">
             We sent a 6-digit code to{'\n'}

@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { Text, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { ClipboardList, LogOut, NotebookPen, Sparkles } from 'lucide-react-native';
+import { ClipboardList, NotebookPen, Sparkles } from 'lucide-react-native';
 import { ScreenScaffold } from '@/components/ui/ScreenScaffold';
 import { ScreenHeader } from '@/components/ui/ScreenHeader';
 import { Button } from '@/components/ui/Button';
@@ -13,7 +13,7 @@ import { api } from '@/lib/api';
 import type { InterventionReportDTO, NudgeDTO } from '@/types';
 
 export default function PatientHome() {
-  const { session, signOut } = useSession();
+  const { session } = useSession();
   const [nudge, setNudge] = useState<NudgeDTO | null>(null);
   const [report, setReport] = useState<InterventionReportDTO | null>(null);
 
@@ -43,11 +43,7 @@ export default function PatientHome() {
         eyebrow="Your Sathi"
         title={`Namaste, ${patient.name.split(' ')[0]}`}
         subtitle={`${patient.state}, ${patient.region}`}
-        right={
-          <Button size="sm" variant="ghost" onPress={() => signOut().then(() => router.replace('/'))}>
-            <LogOut size={14} color="#1C1C1E" />
-          </Button>
-        }
+        showMenu
       />
 
       <NudgeCard nudge={nudge} />
@@ -56,7 +52,7 @@ export default function PatientHome() {
         <Card>
           <View className="flex-row items-center gap-3">
             <View className="h-12 w-12 items-center justify-center rounded-xl bg-terracotta-100">
-              <Sparkles size={20} color="#004C99" />
+              <Sparkles size={20} color="#C4B5FD" />
             </View>
             <View className="flex-1">
               <Text className="font-body-semibold text-base text-ink-800">Your personalized plan</Text>
@@ -69,7 +65,7 @@ export default function PatientHome() {
             <Button
               variant="secondary"
               onPress={() => router.push('/patient/plan')}
-              icon={<ClipboardList size={16} color="#1C1C1E" />}
+              icon={<ClipboardList size={16} color="#F2F2F5" />}
               disabled={!report}
               fullWidth
             >
@@ -83,7 +79,7 @@ export default function PatientHome() {
         <Card>
           <View className="flex-row items-center gap-3">
             <View className="h-12 w-12 items-center justify-center rounded-xl bg-teal-100">
-              <NotebookPen size={20} color="#238999" />
+              <NotebookPen size={20} color="#67E8F9" />
             </View>
             <View className="flex-1">
               <Text className="font-body-semibold text-base text-ink-800">Daily tracker</Text>

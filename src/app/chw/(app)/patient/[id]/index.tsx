@@ -48,7 +48,7 @@ export default function PatientDetail() {
   if (loading || !patient) {
     return (
       <ScreenScaffold contentClassName="flex-1 items-center justify-center">
-        <ActivityIndicator color="#30B0C7" />
+        <ActivityIndicator color="#22D3EE" />
         <ErrorBanner message={error} />
       </ScreenScaffold>
     );
@@ -82,7 +82,7 @@ export default function PatientDetail() {
                 setCopied(true);
                 setTimeout(() => setCopied(false), 1500);
               }}
-              icon={<Copy size={14} color="#1C1C1E" />}
+              icon={<Copy size={14} color="#F2F2F5" />}
             >
               {copied ? 'Copied!' : 'Copy ID'}
             </Button>

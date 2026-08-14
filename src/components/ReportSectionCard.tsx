@@ -58,15 +58,15 @@ const SECTION_TINT: Record<ReportSectionKey, string> = {
 };
 
 const SECTION_ICON_COLOR: Record<ReportSectionKey, string> = {
-  summary: '#C9740A',
-  nutrition: '#0A84FF',
-  grocery: '#238999',
-  recipes: '#0A84FF',
-  exercise: '#238999',
-  behavioral: '#C9740A',
-  weeklyPlan: '#238999',
-  progression: '#C9740A',
-  safety: '#D70015',
+  summary: '#FBBF24',
+  nutrition: '#8B5CF6',
+  grocery: '#67E8F9',
+  recipes: '#8B5CF6',
+  exercise: '#67E8F9',
+  behavioral: '#FBBF24',
+  weeklyPlan: '#67E8F9',
+  progression: '#FBBF24',
+  safety: '#FB7185',
 };
 
 function Bullets({ items }: { items: string[] }) {
@@ -356,7 +356,7 @@ export function ReportSectionCard({ section, index = 0, readOnly, onRegenerate }
           </View>
           {section.version > 1 ? (
             <View className="flex-row items-center gap-1 rounded-full bg-cream-200 px-2 py-1">
-              <History size={12} color="#1C1C1E" />
+              <History size={12} color="#F2F2F5" />
               <Text className="font-body-medium text-[10px] text-ink-800">v{section.version}</Text>
             </View>
           ) : null}
@@ -392,7 +392,7 @@ export function ReportSectionCard({ section, index = 0, readOnly, onRegenerate }
                   value={instruction}
                   onChangeText={setInstruction}
                   placeholder='e.g. "Make the breakfast options strictly vegetarian"'
-                  placeholderTextColor="#8E8E93"
+                  placeholderTextColor="#6E6E78"
                   multiline
                   className="flex-1 rounded-xl bg-cream-100 px-3 py-2 font-body text-sm text-ink-800"
                 />

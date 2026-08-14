@@ -51,7 +51,7 @@ export default function PatientPlan() {
       <ErrorBanner message={error} />
 
       {loading ? (
-        <ActivityIndicator color="#30B0C7" />
+        <ActivityIndicator color="#22D3EE" />
       ) : !report ? (
         <View className="items-center gap-2 rounded-2xl border border-dashed border-cream-300 p-8">
           <Text className="text-center font-body text-sm text-ink-700/70">

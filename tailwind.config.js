@@ -5,60 +5,63 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Neutral surfaces — Apple-style light "grouped" backgrounds.
+        // Neutral surfaces — dark ERP dashboard. `100`/`DEFAULT` is the page
+        // background; `50` is the elevated card surface sitting on top of it;
+        // `200` is a secondary/recessed surface (inputs, secondary buttons);
+        // `300` is the hairline border color used throughout on dark surfaces.
         cream: {
-          DEFAULT: '#F2F2F7',
-          50: '#FFFFFF',
-          100: '#F2F2F7',
-          200: '#E5E5EA',
-          300: '#D1D1D6',
+          DEFAULT: '#0A0A0F',
+          50: '#16161D',
+          100: '#0A0A0F',
+          200: '#1D1D26',
+          300: '#2A2A35',
         },
-        // Text scale — Apple label colors.
+        // Text scale — light text on dark surfaces.
         ink: {
-          DEFAULT: '#1C1C1E',
-          700: '#48484A',
-          800: '#1C1C1E',
-          900: '#000000',
+          DEFAULT: '#F2F2F5',
+          700: '#96969F',
+          800: '#F2F2F5',
+          900: '#FFFFFF',
         },
-        // Primary brand accent — systemBlue.
+        // Primary brand accent — vivid violet.
         terracotta: {
-          DEFAULT: '#0A84FF',
-          50: '#EAF3FF',
-          100: '#D6E9FF',
-          300: '#7FB8FF',
-          500: '#0A84FF',
-          600: '#0066CC',
-          700: '#004C99',
+          DEFAULT: '#8B5CF6',
+          50: '#1B1730',
+          100: '#241D40',
+          300: '#A78BFA',
+          500: '#8B5CF6',
+          600: '#B9A6FB',
+          700: '#DDD6FE',
         },
-        // Secondary accent — systemOrange (warnings, draft states).
+        // Secondary accent — amber (warnings, draft states).
         mustard: {
-          DEFAULT: '#FF9500',
-          50: '#FFF4E5',
-          100: '#FFE7C2',
-          300: '#FFBB5C',
-          500: '#FF9500',
-          600: '#C9740A',
-          700: '#8F5405',
+          DEFAULT: '#F59E0B',
+          50: '#2A2013',
+          100: '#3A2C16',
+          300: '#FCD34D',
+          500: '#F59E0B',
+          600: '#FBBF24',
+          700: '#FDE68A',
         },
-        // Tertiary accent — systemTeal (secondary actions, published states).
+        // Tertiary accent — cyan (secondary actions, published/good states).
         teal: {
-          DEFAULT: '#30B0C7',
-          50: '#E9F8FA',
-          100: '#CDEFF3',
-          300: '#7ED4E0',
-          500: '#30B0C7',
-          600: '#238999',
-          700: '#1B6B79',
+          DEFAULT: '#22D3EE',
+          50: '#122228',
+          100: '#173038',
+          300: '#67E8F9',
+          500: '#22D3EE',
+          600: '#67E8F9',
+          700: '#A5F3FC',
         },
-        // Danger / error — systemRed.
+        // Danger / error — rose.
         danger: {
-          DEFAULT: '#FF3B30',
-          50: '#FFEFEE',
-          100: '#FFD9D6',
-          300: '#FF8A80',
-          500: '#FF3B30',
-          600: '#D70015',
-          700: '#A30011',
+          DEFAULT: '#F43F5E',
+          50: '#2A1218',
+          100: '#3A1820',
+          300: '#FB7185',
+          500: '#F43F5E',
+          600: '#FB7185',
+          700: '#FDA4AF',
         },
       },
       fontFamily: {
@@ -68,8 +71,8 @@ module.exports = {
         'body-semibold': ['Inter_600SemiBold', 'System'],
       },
       boxShadow: {
-        card: '0px 1px 2px rgba(0,0,0,0.04), 0px 4px 14px rgba(0,0,0,0.06)',
-        'card-lg': '0px 2px 8px rgba(0,0,0,0.06), 0px 14px 28px rgba(0,0,0,0.09)',
+        card: '0px 1px 2px rgba(0,0,0,0.2), 0px 4px 14px rgba(0,0,0,0.24)',
+        'card-lg': '0px 2px 8px rgba(0,0,0,0.24), 0px 14px 28px rgba(0,0,0,0.32)',
       },
       borderRadius: {
         xl2: '1.25rem',

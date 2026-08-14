@@ -47,18 +47,9 @@ export function AIThinking({ label = 'Generating culturally-tailored plan…' }:
   }));
 
   return (
-    <View
-      className="flex-row items-center gap-3 rounded-2xl bg-white px-4 py-4"
-      style={{
-        shadowColor: '#000000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.06,
-        shadowRadius: 14,
-        elevation: 3,
-      }}
-    >
+    <View className="flex-row items-center gap-3 rounded-2xl border border-cream-300 bg-cream-50 px-4 py-4">
       <Animated.View style={iconStyle}>
-        <Sparkles size={22} color="#0A84FF" />
+        <Sparkles size={22} color="#8B5CF6" />
       </Animated.View>
       <Text className="flex-1 font-body-medium text-sm text-ink-800">{label}</Text>
       <View className="flex-row gap-1">

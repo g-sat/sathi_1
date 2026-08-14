@@ -22,7 +22,7 @@ export default function Landing() {
   return (
     <ScreenScaffold contentClassName="pt-8">
       <Animated.View entering={ZoomIn.duration(500)} className="items-center gap-3">
-        <GradientIconTile colors={['#3FA2FF', '#0055D4']} size={72}>
+        <GradientIconTile colors={['#A78BFA', '#7C3AED']} size={72}>
           <HeartPulse size={34} color="#FFFFFF" strokeWidth={2.2} />
         </GradientIconTile>
         <Text className="mt-1 font-display text-[2.75rem] leading-[3rem] tracking-tight text-ink-800">
@@ -37,7 +37,7 @@ export default function Landing() {
         <Reveal index={0}>
           <Card className="gap-0">
             <View className="flex-row items-center gap-3.5">
-              <GradientIconTile colors={['#5CC9DC', '#1E8494']} size={52}>
+              <GradientIconTile colors={['#67E8F9', '#0891B2']} size={52}>
                 <Stethoscope size={24} color="#FFFFFF" strokeWidth={2.2} />
               </GradientIconTile>
               <View className="flex-1">
@@ -58,7 +58,7 @@ export default function Landing() {
         <Reveal index={1}>
           <Card className="gap-0">
             <View className="flex-row items-center gap-3.5">
-              <GradientIconTile colors={['#FFB648', '#D97706']} size={52}>
+              <GradientIconTile colors={['#FCD34D', '#D97706']} size={52}>
                 <UserRound size={24} color="#FFFFFF" strokeWidth={2.2} />
               </GradientIconTile>
               <View className="flex-1">

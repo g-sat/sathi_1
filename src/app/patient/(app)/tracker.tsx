@@ -63,7 +63,7 @@ export default function PatientTracker() {
       <Text className="mt-2 font-body-semibold text-sm uppercase tracking-wide text-ink-700/70">
         History
       </Text>
-      {loading ? <ActivityIndicator color="#30B0C7" /> : <LogHistoryList logs={logs} />}
+      {loading ? <ActivityIndicator color="#22D3EE" /> : <LogHistoryList logs={logs} />}
     </ScreenScaffold>
   );
 }

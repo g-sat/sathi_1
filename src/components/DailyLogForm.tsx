@@ -59,7 +59,7 @@ export function DailyLogForm({ patientId, existingLog, onSaved }: DailyLogFormPr
     <View className="gap-4">
       <Card className="gap-3">
         <View className="flex-row items-center gap-2">
-          <Droplet size={18} color="#0A84FF" />
+          <Droplet size={18} color="#8B5CF6" />
           <Text className="font-body-semibold text-base text-ink-800">Glucose reading</Text>
         </View>
         <Input
@@ -79,7 +79,7 @@ export function DailyLogForm({ patientId, existingLog, onSaved }: DailyLogFormPr
 
       <Card className="gap-3">
         <View className="flex-row items-center gap-2">
-          <UtensilsCrossed size={18} color="#FF9500" />
+          <UtensilsCrossed size={18} color="#F59E0B" />
           <Text className="font-body-semibold text-base text-ink-800">Meals eaten today</Text>
         </View>
         {MEAL_TYPES.map((type) => (
@@ -95,7 +95,7 @@ export function DailyLogForm({ patientId, existingLog, onSaved }: DailyLogFormPr
 
       <Card className="gap-3">
         <View className="flex-row items-center gap-2">
-          <Footprints size={18} color="#30B0C7" />
+          <Footprints size={18} color="#22D3EE" />
           <Text className="font-body-semibold text-base text-ink-800">Physical activity</Text>
         </View>
         <Input
@@ -115,7 +115,7 @@ export function DailyLogForm({ patientId, existingLog, onSaved }: DailyLogFormPr
 
       <Card className="gap-3">
         <View className="flex-row items-center gap-2">
-          <Smile size={18} color="#8F5405" />
+          <Smile size={18} color="#FCD34D" />
           <Text className="font-body-semibold text-base text-ink-800">How are you feeling?</Text>
         </View>
         <Input

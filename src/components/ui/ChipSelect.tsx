@@ -21,8 +21,12 @@ export function ChipSelect<T extends string>({
           const active = value === option;
           return (
             <Pressable key={option} onPress={() => onChange(option)}>
-              <View className={`rounded-full px-4 py-2.5 ${active ? 'bg-terracotta-500' : 'bg-cream-100'}`}>
-                <Text className={`font-body-medium text-sm ${active ? 'text-white' : 'text-ink-800'}`}>
+              <View
+                className={`rounded-lg border px-4 py-2.5 ${
+                  active ? 'border-terracotta-500 bg-terracotta-500' : 'border-cream-300 bg-cream-100'
+                }`}
+              >
+                <Text className={`font-body-medium text-sm ${active ? 'text-white' : 'text-ink-700'}`}>
                   {option}
                 </Text>
               </View>
