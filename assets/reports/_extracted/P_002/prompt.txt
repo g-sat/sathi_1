@@ -1,0 +1,168 @@
+﻿You are an expert obesity medicine clinician, lifestyle medicine specialist, exercise counselor, and culturally responsive dietitian. Create a highly practical, safe, incremental, and personalized 14-day diet and physical activity plan for a community-based adult South Asian patient with prediabetes or diabetes.
+
+Your goals:
+Create a feasible plan the patient can actually follow.
+Tailor the plan to demographics, comorbidities, meal pattern, cultural context, functional limitations, schedule, and equipment access. Particularly keep in mind dietary preferences and any religious or cultural restrictions.
+Start at an appropriate baseline and increase gradually over 14 days.
+Emphasize sustainability, safety, and confidence-building rather than perfection.
+Present the final plan in clear weekly tables organized by day of the week.
+Include a patient-tailored grocery list and simple recipes within the output.
+Validate cultural sensitivity & feasibility of diet by using full name as a proxy for region of South Asian heritage.
+
+Important principles:
+- Be realistic and conservative at the start.
+- Never prescribe an abrupt or overly ambitious plan.
+- Use small, progressive increases in activity and nutrition changes.
+- Make recommendations culturally sensitive, affordable, and logistically feasible.
+- Respect pain, fatigue, mobility restrictions, and access barriers.
+- If equipment access is limited, provide home-based options.
+- If the patient is sedentary or deconditioned, begin with very small goals.
+- Build confidence early with minimum-doable goals and fallback options.
+- Avoid unsafe exercise, all-or-nothing language, or extreme diets.
+
+Use the following patient information:
+PATIENT PROFILE
+Age: [49]
+Sex/gender: [F]
+Height: [5 foot 2 inches]
+Weight: [222 lb]
+BMI: [40.6]
+Race/ethnicity: [Indian]
+Region of South Asian ancestry: [India]
+First or Second Generation U.S. resident: [Immigrant]
+Number of Years in the U.S. [4]
+Cultural background / food traditions: [From Maharashtra, eats vegetarian with eggs]
+Language preferences / literacy considerations: [English]
+Occupation / daily routine: [Physician Scientist/Senior Management, oversees clinical trials, hybrid format]
+Family/home responsibilities: [taking care of kids, cleaning, taking care of finances, cooking]
+Budget/food insecurity concerns: [None]
+Primary goals: [improve glucose since she is pre-diabetic, weight loss. She wants to look good and not get sleep apnea. Wants to feel fitter and stronger. Focus on her well-being]
+Time available for meal prep: [makes food fresh every day]
+Sleep pattern: [sleeps around 12am, wakes up around 6:30 am, does not wake up in middle of night] 
+Stress level / major stressors: [Job, managing people]
+
+COMORBIDITIES / CLINICAL CONTEXT
+Comorbidities: [Pre-diabetes, no family history of diabetes, family history of hypertension]
+Relevant symptoms: [none]
+Medications: [No]
+Exercise restrictions / precautions: [none, tries not to get knee heavy]
+Dietary restrictions/allergies/intolerances: [vegetarian with eggs]
+
+CURRENT DIETARY INTAKE
+Breakfast recall: [poha and quinoa, green moong daal dosa, sabudana khichdi, sometimes plain dosa, uttapa]
+Lunch recall: [chia seeds, yogurt, oats with nuts, pomegranate. Along with fruits – berries, blueberries, raspberries]
+Dinner recall: [around 5:30, dinner variable but proper indian dinner: khichdi with pickle (tries to add quinoa), pav bhaji, rajma and rice, vegetable with low gluten Emmer wheat roti]
+Snacks: [tries to not snack, but will have puffed millet mix, sometimes bhel]
+Beverages: [morning and evening chai, sugar free typically, or 1 spoon sugar]
+Eating out frequency: [once a week – usually on weekends]
+Night eating / emotional eating / grazing / large portions: [used to this couple of years ago but has not in the past year]
+Protein intake pattern: [eggs, quinoa, daal, legumes, chickpeas]
+Fruit/vegetable intake: [enjoys fruits and berries,  different types of veggies for dinner sabzi]
+Ultra-processed foods / sweets / sugar-sweetened beverages: [rarely indian sweets during festivals, but no temptation to eat]
+
+FUNCTION/PHYSICAL ACTIVITY BASELINE
+Current physical activity level: [moderately active]
+Current exercise routine: [sunrise salutations yoga, 3-4 days gym for 1 hour: 10 min treadmill, 15 min of the elliptical, 10 min cycling, 10-15 min whole body weight training, plank]
+Average daily steps if known: [8-10,000]
+Functional limitations: [none]
+Access to equipment: [elliptical, gym membership (treadmill, elliptical), can do yoga]
+Access to safe walking area: [yes]
+Enjoyed forms of movement: [walking, yoga]
+Disliked forms of movement: [none – flexible to everything]
+
+OUTPUT REQUIREMENTS
+SECTION 1: Brief patient-tailored summary
+Summarize the main barriers, strengths, risks, and opportunities.
+Explain why the starting plan is realistic.
+
+
+SECTION 2: Nutrition strategy
+Modify the patient's usual breakfast, lunch, and dinner rather than replacing everything.
+Preserve cultural foods whenever possible.
+Give realistic substitutions, portion guidance, and protein/fiber upgrades.
+Include breakfast, lunch, dinner, snack, and beverage strategy.
+Include 3-5 culturally appropriate meal examples.
+Include an easiest possible version for busy days.
+
+SECTION 3: Tailored grocery list
+Create a sample grocery list that is explicitly tailored to the patient's culture, household needs, comorbidities, and budget. Organize it by category.
+
+Required categories:
+Proteins
+High-fiber carbohydrates / starches
+Vegetables
+Fruit
+Healthy fats
+Flavor builders / culturally relevant seasonings
+Convenience foods for busy days
+For each category, include 5-10 practical items and a brief note on why they fit this patient.
+
+SECTION 4: Tailored sample recipes
+Create 4-6 simple recipes using foods from the grocery list. For each recipe include:
+Recipe name
+Why it fits this patient
+Ingredients
+Simple preparation steps
+Easy substitutions for culture, budget, or dietary restriction
+At least:
+1 breakfast recipe
+1 lunch recipe
+1 dinner recipe
+1 snack or grab-and-go option
+Recipes should be realistic for clinic patients, low burden, and feasible on busy days.
+
+SECTION 5: Exercise and movement strategy
+Include walking/cardio progression, resistance training, mobility/stretching/balance as appropriate, recovery days, minimum goal and ideal goal, home-based alternatives, and lower-impact substitutions.
+Use clear dosage: frequency, duration, intensity, and progression.
+
+SECTION 6: Behavioral strategy
+Include 2-4 habit goals at a time only.
+Include self-monitoring suggestions.
+Explain how to handle missed days without starting over.
+Include strategies for stress eating, schedule disruption, weekends, and social events.
+
+SECTION 7: 14-day weekly tables
+Output the full 14-day plan as weekly tables organized as Week 1 through Week 2. Each table must list Monday through Sunday and include these columns:
+Day
+Nutrition focus
+Breakfast / lunch / dinner guidance
+Physical activity goal
+Strength / mobility goal
+Behavioral task / tracking goal
+Notes / modifications
+Requirements:
+Cover all 14 days.
+Progress gradually from week to week.
+Keep repetition manageable but not identical.
+Include at least one lighter/recovery day each week when appropriate.
+Include fallback options for pain flares, busy days, or low motivation days.
+SECTION 8: Progression summary
+Provide a concise summary table with:
+Phase
+Main nutrition goals
+Main exercise goals
+Expected milestones
+Common barriers
+Troubleshooting approach
+
+SECTION 9: Safety and clinical flags
+List important safety considerations based on comorbidities and functional limitations.
+If relevant, note when clinician clearance or modification is needed.
+
+STYLE INSTRUCTIONS
+Be specific, structured, and clinically practical.
+Be supportive, nonjudgmental, and plain-language.
+Favor adherence and sustainability over theoretical perfection.
+Use markdown tables with clean formatting.
+Do not omit any of the 2 weeks.
+
+Before generating the final plan:
+1. Infer the patient's main barriers and strengths from the data.
+2. Estimate an appropriate starting point for diet and exercise.
+3. Make the first week intentionally easy enough to succeed.
+4. Increase difficulty only when justified by baseline capacity.
+5. Make sure the grocery list and recipes clearly match the patient profile.
+
+Now generate the full 2-day personalized diet and exercise plan and format as a publication ready PDF file.
+
+
