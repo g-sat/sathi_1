@@ -1,16 +1,20 @@
-import { useCallback, useState } from 'react';
-import { ActivityIndicator, Text, View } from 'react-native';
-import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
-import { CheckCircle2, RefreshCcw, Sparkles } from 'lucide-react-native';
-import { ScreenScaffold } from '@/components/ui/ScreenScaffold';
-import { ScreenHeader } from '@/components/ui/ScreenHeader';
-import { Badge } from '@/components/ui/Badge';
-import { Button } from '@/components/ui/Button';
-import { AIThinking } from '@/components/ui/AIThinking';
-import { ErrorBanner } from '@/components/ui/ErrorBanner';
-import { ReportSectionCard } from '@/components/ReportSectionCard';
-import { api } from '@/lib/api';
-import type { InterventionReportDTO, PatientProfileDTO, ReportSectionKey } from '@/types';
+import { ReportSectionCard } from "@/components/ReportSectionCard";
+import { AIThinking } from "@/components/ui/AIThinking";
+import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
+import { ErrorBanner } from "@/components/ui/ErrorBanner";
+import { ScreenHeader } from "@/components/ui/ScreenHeader";
+import { ScreenScaffold } from "@/components/ui/ScreenScaffold";
+import { api } from "@/lib/api";
+import type {
+    InterventionReportDTO,
+    PatientProfileDTO,
+    ReportSectionKey,
+} from "@/types";
+import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
+import { CheckCircle2, RefreshCcw, Sparkles } from "lucide-react-native";
+import { useCallback, useState } from "react";
+import { ActivityIndicator, Text, View } from "react-native";
 
 export default function ReviewReport() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -33,7 +37,7 @@ export default function ReviewReport() {
       setPatient(patient);
       setReport(report);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Could not load the report.');
+      setError(e instanceof Error ? e.message : "Could not load the report.");
     } finally {
       setLoading(false);
     }
@@ -42,7 +46,7 @@ export default function ReviewReport() {
   useFocusEffect(
     useCallback(() => {
       load();
-    }, [load])
+    }, [load]),
   );
 
   async function handleGenerate() {
@@ -53,19 +57,26 @@ export default function ReviewReport() {
       const { report } = await api.generateReport(id);
       setReport(report);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Generation failed.');
+      setError(e instanceof Error ? e.message : "Generation failed.");
     } finally {
       setGenerating(false);
     }
   }
 
-  async function handleRegenerate(section: ReportSectionKey, instruction: string) {
+  async function handleRegenerate(
+    section: ReportSectionKey,
+    instruction: string,
+  ) {
     if (!report) return;
     try {
-      const { report: updated } = await api.regenerateSection(report.id, section, instruction);
+      const { report: updated } = await api.regenerateSection(
+        report.id,
+        section,
+        instruction,
+      );
       setReport(updated);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Regeneration failed.');
+      setError(e instanceof Error ? e.message : "Regeneration failed.");
     }
   }
 
@@ -77,7 +88,7 @@ export default function ReviewReport() {
       const { report: updated } = await api.publishReport(report.id);
       setReport(updated);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Publishing failed.');
+      setError(e instanceof Error ? e.message : "Publishing failed.");
     } finally {
       setPublishing(false);
     }
@@ -91,7 +102,7 @@ export default function ReviewReport() {
     );
   }
 
-  const isPublished = report?.status === 'published';
+  const isPublished = report?.status === "published";
 
   return (
     <ScreenScaffold>
@@ -100,7 +111,13 @@ export default function ReviewReport() {
         title={`${patient.name}'s plan`}
         subtitle="Review each section — refine anything that doesn't feel right before publishing"
         showBack
-        right={report ? <Badge tone={isPublished ? 'published' : 'draft'}>{report.status}</Badge> : undefined}
+        right={
+          report ? (
+            <Badge tone={isPublished ? "published" : "draft"}>
+              {report.status}
+            </Badge>
+          ) : undefined
+        }
       />
 
       <ErrorBanner message={error} />
@@ -114,7 +131,10 @@ export default function ReviewReport() {
             <Text className="text-center font-body text-sm text-ink-700/70">
               No plan generated yet for {patient.name}.
             </Text>
-            <Button onPress={handleGenerate} icon={<Sparkles size={16} color="#FFFFFF" />}>
+            <Button
+              onPress={handleGenerate}
+              icon={<Sparkles size={16} color="#FFFFFF" />}
+            >
               Generate AI plan
             </Button>
           </View>
@@ -128,7 +148,9 @@ export default function ReviewReport() {
               index={i}
               readOnly={isPublished}
               onRegenerate={
-                isPublished ? undefined : (instruction) => handleRegenerate(section.key, instruction)
+                isPublished
+                  ? undefined
+                  : (instruction) => handleRegenerate(section.key, instruction)
               }
             />
           ))}
@@ -163,7 +185,11 @@ export default function ReviewReport() {
               <Text className="text-center font-body-medium text-sm text-teal-700">
                 Published — {patient.name} can now see this plan in their app.
               </Text>
-              <Button size="sm" variant="ghost" onPress={() => router.push(`/chw/patient/${patient.id}`)}>
+              <Button
+                size="sm"
+                variant="ghost"
+                onPress={() => router.push(`/chw/patient/${patient.id}`)}
+              >
                 Back to patient
               </Button>
             </View>

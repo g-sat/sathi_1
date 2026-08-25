@@ -1,4 +1,18 @@
-import { GoogleGenAI, Type } from '@google/genai';
+import { SECTION_LABELS, SECTION_ORDER } from "@/lib/constants";
+import type {
+    BehavioralSectionData,
+    ExerciseSectionData,
+    GrocerySectionData,
+    NutritionSectionData,
+    ProgressionSectionData,
+    RecipesSectionData,
+    ReportSectionKey,
+    SafetySectionData,
+    SummarySectionData,
+    WeeklyPlanSectionData,
+} from "@/types";
+import { GoogleGenAI, Type } from "@google/genai";
+import type { PatientProfileDoc } from "./models/PatientProfile";
 
 // ---------------------------------------------------------------------------
 // Expo Router's server runtime replaces the global `fetch` with a minimal
@@ -11,28 +25,20 @@ import { GoogleGenAI, Type } from '@google/genai';
 // We wrap the global fetch once to raise that timeout for every request.
 // ---------------------------------------------------------------------------
 const GEMINI_FETCH_TIMEOUT_MS = 180_000;
-const patchedFetchMarker = '__sathiConnectTimeoutPatched__';
-if (typeof globalThis.fetch === 'function' && !(globalThis.fetch as any)[patchedFetchMarker]) {
+const patchedFetchMarker = "__sathiConnectTimeoutPatched__";
+if (
+  typeof globalThis.fetch === "function" &&
+  !(globalThis.fetch as any)[patchedFetchMarker]
+) {
   const originalFetch = globalThis.fetch.bind(globalThis);
   const patched = (input: any, init?: any) =>
-    originalFetch(input, { connectTimeout: GEMINI_FETCH_TIMEOUT_MS, ...(init || {}) });
+    originalFetch(input, {
+      connectTimeout: GEMINI_FETCH_TIMEOUT_MS,
+      ...(init || {}),
+    });
   (patched as any)[patchedFetchMarker] = true;
   globalThis.fetch = patched as typeof fetch;
 }
-import type { PatientProfileDoc } from './models/PatientProfile';
-import { SECTION_LABELS, SECTION_ORDER } from '@/lib/constants';
-import type {
-  BehavioralSectionData,
-  ExerciseSectionData,
-  GrocerySectionData,
-  NutritionSectionData,
-  ProgressionSectionData,
-  ReportSectionKey,
-  SafetySectionData,
-  SummarySectionData,
-  RecipesSectionData,
-  WeeklyPlanSectionData,
-} from '@/types';
 
 // ---------------------------------------------------------------------------
 // Gemini occasionally returns 503 UNAVAILABLE ("high demand") or 429
@@ -45,14 +51,21 @@ import type {
 // ---------------------------------------------------------------------------
 function isRetryableGeminiError(err: unknown): boolean {
   const message = err instanceof Error ? err.message : String(err);
-  return /"code"\s*:\s*(429|500|502|503|504)/.test(message) || /UNAVAILABLE|RESOURCE_EXHAUSTED/i.test(message);
+  return (
+    /"code"\s*:\s*(429|500|502|503|504)/.test(message) ||
+    /UNAVAILABLE|RESOURCE_EXHAUSTED/i.test(message)
+  );
 }
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function withGeminiRetry<T>(fn: () => Promise<T>, attempts = 4, baseDelayMs = 2000): Promise<T> {
+async function withGeminiRetry<T>(
+  fn: () => Promise<T>,
+  attempts = 4,
+  baseDelayMs = 2000,
+): Promise<T> {
   let lastErr: unknown;
   for (let attempt = 0; attempt < attempts; attempt++) {
     try {
@@ -62,7 +75,7 @@ async function withGeminiRetry<T>(fn: () => Promise<T>, attempts = 4, baseDelayM
       if (attempt === attempts - 1 || !isRetryableGeminiError(err)) {
         if (isRetryableGeminiError(err)) {
           throw new Error(
-            "Gemini is experiencing high demand right now and didn't respond after several retries. Please wait a minute and try again."
+            "Gemini is experiencing high demand right now and didn't respond after several retries. Please wait a minute and try again.",
           );
         }
         throw err;
@@ -80,7 +93,9 @@ function getClient(): GoogleGenAI {
   if (!client) {
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
-      throw new Error('GEMINI_API_KEY is not set. Add it to your .env.local file.');
+      throw new Error(
+        "GEMINI_API_KEY is not set. Add it to your .env.local file.",
+      );
     }
     client = new GoogleGenAI({
       apiKey,
@@ -96,7 +111,7 @@ function getClient(): GoogleGenAI {
 
 // Pinned to the "latest" flash alias so the app keeps working as Google
 // deprecates/rotates specific dated model snapshots over time.
-const MODEL = 'gemini-flash-latest';
+const MODEL = "gemini-flash-latest";
 
 // ---------------------------------------------------------------------------
 // This whole module is built directly from the master "AI Prompt" template
@@ -140,23 +155,36 @@ Important principles:
 - Keep clinical claims conservative and always suggest confirming numeric targets with a doctor.
 - Output must strictly match the requested JSON schema. Do not include markdown formatting.`;
 
-function bmiFrom(heightFeet?: number, heightInches?: number, weightLbs?: number): number | undefined {
+function bmiFrom(
+  heightFeet?: number,
+  heightInches?: number,
+  weightLbs?: number,
+): number | undefined {
   if (!heightFeet || !weightLbs) return undefined;
   const totalInches = heightFeet * 12 + (heightInches || 0);
   if (!totalInches) return undefined;
-  return Math.round(((703 * weightLbs) / (totalInches * totalInches)) * 10) / 10;
+  return (
+    Math.round(((703 * weightLbs) / (totalInches * totalInches)) * 10) / 10
+  );
 }
 
-function or(value: string | number | boolean | undefined | null, fallback = 'not provided'): string {
-  if (value === undefined || value === null || value === '') return fallback;
+function or(
+  value: string | number | boolean | undefined | null,
+  fallback = "not provided",
+): string {
+  if (value === undefined || value === null || value === "") return fallback;
   return String(value);
 }
 
 function patientContext(patient: PatientProfileDoc): string {
-  const bmi = bmiFrom(patient.heightFeet ?? undefined, patient.heightInches ?? undefined, patient.weightLbs ?? undefined);
+  const bmi = bmiFrom(
+    patient.heightFeet ?? undefined,
+    patient.heightInches ?? undefined,
+    patient.weightLbs ?? undefined,
+  );
   const heightText = patient.heightFeet
     ? `${patient.heightFeet} foot ${patient.heightInches ?? 0} inches`
-    : 'not provided';
+    : "not provided";
 
   return `
 PATIENT PROFILE
@@ -164,7 +192,7 @@ Full name: ${patient.name}
 Age: ${patient.age}
 Sex/gender: ${patient.gender}
 Height: ${heightText}
-Weight: ${or(patient.weightLbs, 'not provided')}${patient.weightLbs ? ' lb' : ''}
+Weight: ${or(patient.weightLbs, "not provided")}${patient.weightLbs ? " lb" : ""}
 BMI: ${or(bmi)}
 Race/ethnicity: ${or(patient.raceEthnicity, patient.region)}
 Region of South Asian ancestry: ${patient.region} (${patient.state})
@@ -173,25 +201,25 @@ Years in current country: ${or(patient.yearsInCountry)}
 Cultural background / food traditions: ${or(patient.culturalFoodTraditions)}
 Dietary pattern: ${patient.dietaryPattern}
 Language preferences / literacy considerations: ${patient.localLanguage}${
-    patient.languageLiteracyNotes ? ` — ${patient.languageLiteracyNotes}` : ''
+    patient.languageLiteracyNotes ? ` — ${patient.languageLiteracyNotes}` : ""
   }
 Occupation / daily routine: ${or(patient.occupationDailyRoutine)}
 Family/home responsibilities: ${or(patient.familyHomeResponsibilities)}
-Budget/food insecurity concerns: ${or(patient.budgetConcerns, 'None reported')}
-Primary goals: ${or(patient.primaryGoals, 'Improve glucose control and build a sustainable lifestyle')}
+Budget/food insecurity concerns: ${or(patient.budgetConcerns, "None reported")}
+Primary goals: ${or(patient.primaryGoals, "Improve glucose control and build a sustainable lifestyle")}
 Time available for meal prep: ${or(patient.mealPrepTimeAvailable)}
 Sleep pattern: ${or(patient.sleepPattern)}
 Stress level / major stressors: ${or(patient.stressLevel)}
 
 COMORBIDITIES / CLINICAL CONTEXT
-Comorbidities: ${or(patient.comorbidities, patient.familyHistoryDiabetes ? 'Family history of diabetes' : 'not provided')}
-Relevant symptoms: ${or(patient.relevantSymptoms, 'none reported')}
-Medications: ${or(patient.medications, 'none reported')}
-Exercise restrictions / precautions: ${or(patient.exerciseRestrictions, 'none reported')}
-Dietary restrictions/allergies/intolerances: ${or(patient.dietaryRestrictionsAllergies, 'none reported')}
-Fasting glucose: ${or(patient.fastingGlucose)}${patient.fastingGlucose ? ' mg/dL' : ''}
-HbA1c: ${or(patient.hba1c)}${patient.hba1c ? ' %' : ''}
-Waist circumference: ${or(patient.waistCircumferenceCm)}${patient.waistCircumferenceCm ? ' cm' : ''}
+Comorbidities: ${or(patient.comorbidities, patient.familyHistoryDiabetes ? "Family history of diabetes" : "not provided")}
+Relevant symptoms: ${or(patient.relevantSymptoms, "none reported")}
+Medications: ${or(patient.medications, "none reported")}
+Exercise restrictions / precautions: ${or(patient.exerciseRestrictions, "none reported")}
+Dietary restrictions/allergies/intolerances: ${or(patient.dietaryRestrictionsAllergies, "none reported")}
+Fasting glucose: ${or(patient.fastingGlucose)}${patient.fastingGlucose ? " mg/dL" : ""}
+HbA1c: ${or(patient.hba1c)}${patient.hba1c ? " %" : ""}
+Waist circumference: ${or(patient.waistCircumferenceCm)}${patient.waistCircumferenceCm ? " cm" : ""}
 
 CURRENT DIETARY INTAKE
 Breakfast recall: ${or(patient.breakfastRecall)}
@@ -200,7 +228,7 @@ Dinner recall: ${or(patient.dinnerRecall)}
 Snacks: ${or(patient.snacksRecall)}
 Beverages: ${or(patient.beveragesRecall)}
 Eating out frequency: ${or(patient.eatingOutFrequency)}
-Night eating / emotional eating / grazing / large portions: ${or(patient.nightEmotionalEatingPattern, 'not reported')}
+Night eating / emotional eating / grazing / large portions: ${or(patient.nightEmotionalEatingPattern, "not reported")}
 Protein intake pattern: ${or(patient.proteinIntakePattern)}
 Fruit/vegetable intake: ${or(patient.fruitVegIntake)}
 Ultra-processed foods / sweets / sugar-sweetened beverages: ${or(patient.processedFoodsSweetsIntake)}
@@ -209,13 +237,13 @@ FUNCTION/PHYSICAL ACTIVITY BASELINE
 Current physical activity level: ${patient.physicalActivityLevel}
 Current exercise routine: ${or(patient.currentExerciseRoutine)}
 Average daily steps if known: ${or(patient.averageDailySteps)}
-Functional limitations: ${or(patient.functionalLimitations, 'none reported')}
-Access to equipment: ${or(patient.equipmentAccess, 'none reported')}
-Access to safe walking area: ${patient.safeWalkingArea === undefined || patient.safeWalkingArea === null ? 'not provided' : patient.safeWalkingArea ? 'yes' : 'no'}
+Functional limitations: ${or(patient.functionalLimitations, "none reported")}
+Access to equipment: ${or(patient.equipmentAccess, "none reported")}
+Access to safe walking area: ${patient.safeWalkingArea === undefined || patient.safeWalkingArea === null ? "not provided" : patient.safeWalkingArea ? "yes" : "no"}
 Enjoyed forms of movement: ${or(patient.enjoyedMovementForms)}
-Disliked forms of movement: ${or(patient.dislikedMovementForms, 'none reported')}
+Disliked forms of movement: ${or(patient.dislikedMovementForms, "none reported")}
 
-CHW notes: ${or(patient.notes, 'none')}
+CHW notes: ${or(patient.notes, "none")}
 `.trim();
 }
 
@@ -265,7 +293,7 @@ const GROCERY_ITEM_SCHEMA = {
     item: { type: Type.STRING },
     why: { type: Type.STRING },
   },
-  required: ['item', 'why'],
+  required: ["item", "why"],
 };
 
 const SUMMARY_SCHEMA = {
@@ -275,7 +303,7 @@ const SUMMARY_SCHEMA = {
     barriersAndRisks: { type: Type.ARRAY, items: { type: Type.STRING } },
     whyThisPlanIsRealistic: { type: Type.STRING },
   },
-  required: ['strengths', 'barriersAndRisks', 'whyThisPlanIsRealistic'],
+  required: ["strengths", "barriersAndRisks", "whyThisPlanIsRealistic"],
 };
 
 const MEAL_EXAMPLE_SCHEMA = {
@@ -284,7 +312,7 @@ const MEAL_EXAMPLE_SCHEMA = {
     title: { type: Type.STRING },
     description: { type: Type.STRING },
   },
-  required: ['title', 'description'],
+  required: ["title", "description"],
 };
 
 const NUTRITION_SCHEMA = {
@@ -298,12 +326,12 @@ const NUTRITION_SCHEMA = {
     easiestVersionForBusyDays: { type: Type.STRING },
   },
   required: [
-    'breakfastStrategy',
-    'lunchStrategy',
-    'dinnerStrategy',
-    'snacksAndBeveragesStrategy',
-    'mealExamples',
-    'easiestVersionForBusyDays',
+    "breakfastStrategy",
+    "lunchStrategy",
+    "dinnerStrategy",
+    "snacksAndBeveragesStrategy",
+    "mealExamples",
+    "easiestVersionForBusyDays",
   ],
 };
 
@@ -319,13 +347,13 @@ const GROCERY_SCHEMA = {
     convenienceFoods: { type: Type.ARRAY, items: GROCERY_ITEM_SCHEMA },
   },
   required: [
-    'proteins',
-    'highFiberCarbohydrates',
-    'vegetables',
-    'fruit',
-    'healthyFats',
-    'flavorBuilders',
-    'convenienceFoods',
+    "proteins",
+    "highFiberCarbohydrates",
+    "vegetables",
+    "fruit",
+    "healthyFats",
+    "flavorBuilders",
+    "convenienceFoods",
   ],
 };
 
@@ -333,19 +361,29 @@ const RECIPE_SCHEMA = {
   type: Type.OBJECT,
   properties: {
     name: { type: Type.STRING },
-    mealType: { type: Type.STRING, enum: ['Breakfast', 'Lunch', 'Dinner', 'Snack'] },
+    mealType: {
+      type: Type.STRING,
+      enum: ["Breakfast", "Lunch", "Dinner", "Snack"],
+    },
     whyItFitsThisPatient: { type: Type.STRING },
     ingredients: { type: Type.ARRAY, items: { type: Type.STRING } },
     steps: { type: Type.ARRAY, items: { type: Type.STRING } },
     substitutions: { type: Type.STRING },
   },
-  required: ['name', 'mealType', 'whyItFitsThisPatient', 'ingredients', 'steps', 'substitutions'],
+  required: [
+    "name",
+    "mealType",
+    "whyItFitsThisPatient",
+    "ingredients",
+    "steps",
+    "substitutions",
+  ],
 };
 
 const RECIPES_SCHEMA = {
   type: Type.OBJECT,
   properties: { recipes: { type: Type.ARRAY, items: RECIPE_SCHEMA } },
-  required: ['recipes'],
+  required: ["recipes"],
 };
 
 const EXERCISE_SCHEMA = {
@@ -361,14 +399,14 @@ const EXERCISE_SCHEMA = {
     lowerImpactSubstitutions: { type: Type.STRING },
   },
   required: [
-    'cardioProgression',
-    'resistanceTraining',
-    'mobilityAndBalance',
-    'recoveryDays',
-    'minimumGoal',
-    'idealGoal',
-    'homeBasedAlternatives',
-    'lowerImpactSubstitutions',
+    "cardioProgression",
+    "resistanceTraining",
+    "mobilityAndBalance",
+    "recoveryDays",
+    "minimumGoal",
+    "idealGoal",
+    "homeBasedAlternatives",
+    "lowerImpactSubstitutions",
   ],
 };
 
@@ -380,7 +418,12 @@ const BEHAVIORAL_SCHEMA = {
     handlingMissedDays: { type: Type.STRING },
     stressAndDisruptionStrategy: { type: Type.STRING },
   },
-  required: ['habitGoals', 'selfMonitoringSuggestions', 'handlingMissedDays', 'stressAndDisruptionStrategy'],
+  required: [
+    "habitGoals",
+    "selfMonitoringSuggestions",
+    "handlingMissedDays",
+    "stressAndDisruptionStrategy",
+  ],
 };
 
 const DAY_PLAN_SCHEMA = {
@@ -395,13 +438,13 @@ const DAY_PLAN_SCHEMA = {
     notes: { type: Type.STRING },
   },
   required: [
-    'day',
-    'nutritionFocus',
-    'mealGuidance',
-    'physicalActivityGoal',
-    'strengthOrMobilityGoal',
-    'behavioralTask',
-    'notes',
+    "day",
+    "nutritionFocus",
+    "mealGuidance",
+    "physicalActivityGoal",
+    "strengthOrMobilityGoal",
+    "behavioralTask",
+    "notes",
   ],
 };
 
@@ -411,13 +454,13 @@ const WEEK_PLAN_SCHEMA = {
     weekNumber: { type: Type.NUMBER },
     days: { type: Type.ARRAY, items: DAY_PLAN_SCHEMA },
   },
-  required: ['weekNumber', 'days'],
+  required: ["weekNumber", "days"],
 };
 
 const WEEKLY_PLAN_SCHEMA = {
   type: Type.OBJECT,
   properties: { weeks: { type: Type.ARRAY, items: WEEK_PLAN_SCHEMA } },
-  required: ['weeks'],
+  required: ["weeks"],
 };
 
 const PROGRESSION_PHASE_SCHEMA = {
@@ -431,19 +474,19 @@ const PROGRESSION_PHASE_SCHEMA = {
     troubleshootingApproach: { type: Type.STRING },
   },
   required: [
-    'phase',
-    'nutritionGoals',
-    'exerciseGoals',
-    'expectedMilestones',
-    'commonBarriers',
-    'troubleshootingApproach',
+    "phase",
+    "nutritionGoals",
+    "exerciseGoals",
+    "expectedMilestones",
+    "commonBarriers",
+    "troubleshootingApproach",
   ],
 };
 
 const PROGRESSION_SCHEMA = {
   type: Type.OBJECT,
   properties: { phases: { type: Type.ARRAY, items: PROGRESSION_PHASE_SCHEMA } },
-  required: ['phases'],
+  required: ["phases"],
 };
 
 const SAFETY_SCHEMA = {
@@ -452,7 +495,7 @@ const SAFETY_SCHEMA = {
     flags: { type: Type.ARRAY, items: { type: Type.STRING } },
     clinicianClearanceNotes: { type: Type.STRING },
   },
-  required: ['flags', 'clinicianClearanceNotes'],
+  required: ["flags", "clinicianClearanceNotes"],
 };
 
 const SECTION_SCHEMAS: Record<ReportSectionKey, object> = {
@@ -480,13 +523,24 @@ const FULL_REPORT_SCHEMA = {
     progression: PROGRESSION_SCHEMA,
     safety: SAFETY_SCHEMA,
   },
-  required: ['summary', 'nutrition', 'grocery', 'recipes', 'exercise', 'behavioral', 'weeklyPlan', 'progression', 'safety'],
+  required: [
+    "summary",
+    "nutrition",
+    "grocery",
+    "recipes",
+    "exercise",
+    "behavioral",
+    "weeklyPlan",
+    "progression",
+    "safety",
+  ],
 };
 
 function buildInitialPrompt(patient: PatientProfileDoc): string {
   const sectionsText = SECTION_ORDER.map(
-    (key, i) => `SECTION ${i + 1} — "${key}" (${SECTION_LABELS[key]}): ${SECTION_INSTRUCTIONS[key]}`
-  ).join('\n\n');
+    (key, i) =>
+      `SECTION ${i + 1} — "${key}" (${SECTION_LABELS[key]}): ${SECTION_INSTRUCTIONS[key]}`,
+  ).join("\n\n");
 
   return `Create a highly practical, safe, incremental, and personalized 14-day diet and physical
 activity plan for the community-based adult South Asian patient described below.
@@ -512,7 +566,7 @@ function buildRegeneratePrompt(
   patient: PatientProfileDoc,
   key: ReportSectionKey,
   currentData: unknown,
-  followUpInstruction: string
+  followUpInstruction: string,
 ): string {
   return `You previously generated the "${SECTION_LABELS[key]}" section of a patient's Diabetes
 Prevention Program report. The CHW reviewed it and wants a revision.
@@ -543,7 +597,9 @@ export interface GeneratedFullReport {
   safety: SafetySectionData;
 }
 
-export async function generateFullReport(patient: PatientProfileDoc): Promise<GeneratedFullReport> {
+export async function generateFullReport(
+  patient: PatientProfileDoc,
+): Promise<GeneratedFullReport> {
   const ai = getClient();
   const response = await withGeminiRetry(() =>
     ai.models.generateContent({
@@ -551,15 +607,18 @@ export async function generateFullReport(patient: PatientProfileDoc): Promise<Ge
       contents: buildInitialPrompt(patient),
       config: {
         systemInstruction: SYSTEM_INSTRUCTION,
-        responseMimeType: 'application/json',
+        responseMimeType: "application/json",
         responseSchema: FULL_REPORT_SCHEMA,
         temperature: 0.7,
       },
-    })
+    }),
   );
 
   const text = response.text;
-  if (!text) throw new Error('Gemini returned an empty response while generating the report.');
+  if (!text)
+    throw new Error(
+      "Gemini returned an empty response while generating the report.",
+    );
   return JSON.parse(text) as GeneratedFullReport;
 }
 
@@ -577,24 +636,32 @@ export async function regenerateSection(
   patient: PatientProfileDoc,
   key: ReportSectionKey,
   currentData: unknown,
-  followUpInstruction: string
+  followUpInstruction: string,
 ): Promise<unknown> {
   const ai = getClient();
   const response = await withGeminiRetry(() =>
     ai.models.generateContent({
       model: MODEL,
-      contents: buildRegeneratePrompt(patient, key, currentData, followUpInstruction),
+      contents: buildRegeneratePrompt(
+        patient,
+        key,
+        currentData,
+        followUpInstruction,
+      ),
       config: {
         systemInstruction: SYSTEM_INSTRUCTION,
-        responseMimeType: 'application/json',
+        responseMimeType: "application/json",
         responseSchema: SECTION_SCHEMAS[key],
         temperature: 0.7,
       },
-    })
+    }),
   );
 
   const text = response.text;
-  if (!text) throw new Error('Gemini returned an empty response while regenerating the section.');
+  if (!text)
+    throw new Error(
+      "Gemini returned an empty response while regenerating the section.",
+    );
   return JSON.parse(text);
 }
 
@@ -604,11 +671,11 @@ const NUDGE_SCHEMA = {
     english: { type: Type.STRING },
     translated: { type: Type.STRING },
   },
-  required: ['english', 'translated'],
+  required: ["english", "translated"],
 };
 
 export async function generateDailyNudge(
-  patient: PatientProfileDoc
+  patient: PatientProfileDoc,
 ): Promise<{ english: string; translated: string }> {
   const ai = getClient();
   const response = await withGeminiRetry(() =>
@@ -619,23 +686,26 @@ Diabetes Prevention Program patient. It should reference something achievable to
 swap, a short walk, a breathing/rest habit) appropriate for their culture and routine.
 
 Patient: ${patient.name}, region of South Asian ancestry: ${patient.region} (${patient.state}),
-dietary pattern: ${patient.dietaryPattern}, primary goals: ${or(patient.primaryGoals, 'improve glucose control')},
-comorbidities: ${or(patient.comorbidities, 'none reported')},
-current exercise routine: ${or(patient.currentExerciseRoutine, 'not provided')}.
+dietary pattern: ${patient.dietaryPattern}, primary goals: ${or(patient.primaryGoals, "improve glucose control")},
+comorbidities: ${or(patient.comorbidities, "none reported")},
+current exercise routine: ${or(patient.currentExerciseRoutine, "not provided")}.
 
 Return the nudge in English ("english") AND a natural, conversational translation into
 ${patient.localLanguage} ("translated"). Do not transliterate — write the translation using
 the native script of ${patient.localLanguage} where applicable.`,
       config: {
         systemInstruction: SYSTEM_INSTRUCTION,
-        responseMimeType: 'application/json',
+        responseMimeType: "application/json",
         responseSchema: NUDGE_SCHEMA,
         temperature: 0.9,
       },
-    })
+    }),
   );
 
   const text = response.text;
-  if (!text) throw new Error('Gemini returned an empty response while generating the nudge.');
+  if (!text)
+    throw new Error(
+      "Gemini returned an empty response while generating the nudge.",
+    );
   return JSON.parse(text) as { english: string; translated: string };
 }
