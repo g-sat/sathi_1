@@ -47,7 +47,7 @@ export default function MonitorAll() {
       />
       <ErrorBanner message={error} />
       {loading ? (
-        <ActivityIndicator color="#22D3EE" />
+        <ActivityIndicator color="#2563EB" />
       ) : rows.length === 0 ? (
         <View className="items-center gap-2 rounded-2xl border border-dashed border-cream-300 p-8">
           <Text className="text-center font-body text-sm text-ink-700/70">

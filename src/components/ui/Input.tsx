@@ -11,7 +11,7 @@ export function Input({ label, error, hint, style, ...props }: InputProps) {
     <View className="gap-1.5">
       <Text className="font-body-semibold text-sm text-ink-800">{label}</Text>
       <TextInput
-        placeholderTextColor="#6E6E78"
+        placeholderTextColor="#94A3B8"
         className={`rounded-xl bg-cream-100 px-4 py-3.5 font-body text-base text-ink-800 border ${
           error ? 'border-danger-500' : 'border-cream-300'
         }`}

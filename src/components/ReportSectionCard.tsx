@@ -1,37 +1,37 @@
-import { AIThinking } from "@/components/ui/AIThinking";
-import { Button } from "@/components/ui/Button";
-import { Card } from "@/components/ui/Card";
-import { Reveal } from "@/components/ui/Reveal";
-import { SECTION_LABELS } from "@/lib/constants";
-import type {
-    BehavioralSectionData,
-    ExerciseSectionData,
-    GrocerySectionData,
-    NutritionSectionData,
-    ProgressionSectionData,
-    RecipesSectionData,
-    ReportSection,
-    ReportSectionKey,
-    SafetySectionData,
-    SummarySectionData,
-    WeeklyPlanSectionData,
-} from "@/types";
+import { useState } from 'react';
+import { Text, TextInput, View } from 'react-native';
+import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import {
-    Brain,
-    CalendarDays,
-    ChefHat,
-    ClipboardList,
-    Dumbbell,
-    History,
-    Salad,
-    ShieldAlert,
-    ShoppingCart,
-    TrendingUp,
-    Wand2,
-} from "lucide-react-native";
-import { useState } from "react";
-import { Text, TextInput, View } from "react-native";
-import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
+  ClipboardList,
+  Salad,
+  ShoppingCart,
+  ChefHat,
+  Dumbbell,
+  Brain,
+  CalendarDays,
+  TrendingUp,
+  ShieldAlert,
+  History,
+  Wand2,
+} from 'lucide-react-native';
+import { Card } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
+import { AIThinking } from '@/components/ui/AIThinking';
+import { Reveal } from '@/components/ui/Reveal';
+import { SECTION_LABELS } from '@/lib/constants';
+import type {
+  BehavioralSectionData,
+  ExerciseSectionData,
+  GrocerySectionData,
+  NutritionSectionData,
+  ProgressionSectionData,
+  RecipesSectionData,
+  ReportSection,
+  ReportSectionKey,
+  SafetySectionData,
+  SummarySectionData,
+  WeeklyPlanSectionData,
+} from '@/types';
 
 const SECTION_ICON: Record<ReportSectionKey, any> = {
   summary: ClipboardList,
@@ -46,27 +46,27 @@ const SECTION_ICON: Record<ReportSectionKey, any> = {
 };
 
 const SECTION_TINT: Record<ReportSectionKey, string> = {
-  summary: "bg-mustard-50",
-  nutrition: "bg-terracotta-50",
-  grocery: "bg-teal-50",
-  recipes: "bg-terracotta-50",
-  exercise: "bg-teal-50",
-  behavioral: "bg-mustard-50",
-  weeklyPlan: "bg-teal-50",
-  progression: "bg-mustard-50",
-  safety: "bg-danger-50",
+  summary: 'bg-mustard-50',
+  nutrition: 'bg-terracotta-50',
+  grocery: 'bg-teal-50',
+  recipes: 'bg-terracotta-50',
+  exercise: 'bg-teal-50',
+  behavioral: 'bg-mustard-50',
+  weeklyPlan: 'bg-teal-50',
+  progression: 'bg-mustard-50',
+  safety: 'bg-danger-50',
 };
 
 const SECTION_ICON_COLOR: Record<ReportSectionKey, string> = {
-  summary: "#FBBF24",
-  nutrition: "#8B5CF6",
-  grocery: "#67E8F9",
-  recipes: "#8B5CF6",
-  exercise: "#67E8F9",
-  behavioral: "#FBBF24",
-  weeklyPlan: "#67E8F9",
-  progression: "#FBBF24",
-  safety: "#FB7185",
+  summary: '#D97706',
+  nutrition: '#2563EB',
+  grocery: '#0891B2',
+  recipes: '#2563EB',
+  exercise: '#0891B2',
+  behavioral: '#D97706',
+  weeklyPlan: '#0891B2',
+  progression: '#D97706',
+  safety: '#E11D48',
 };
 
 function Bullets({ items }: { items: string[] }) {
@@ -75,9 +75,7 @@ function Bullets({ items }: { items: string[] }) {
       {items.map((item, i) => (
         <View key={i} className="flex-row gap-2 rounded-xl bg-cream-100 p-3">
           <View className="mt-1.5 h-1.5 w-1.5 rounded-full bg-terracotta-500" />
-          <Text className="flex-1 font-body text-sm leading-5 text-ink-700/90">
-            {item}
-          </Text>
+          <Text className="flex-1 font-body text-sm leading-5 text-ink-700/90">{item}</Text>
         </View>
       ))}
     </View>
@@ -88,9 +86,7 @@ function Field({ label, value }: { label: string; value?: string }) {
   if (!value) return null;
   return (
     <View className="gap-1">
-      <Text className="font-body-semibold text-xs uppercase tracking-wide text-ink-700/60">
-        {label}
-      </Text>
+      <Text className="font-body-semibold text-xs uppercase tracking-wide text-ink-700/60">{label}</Text>
       <Text className="font-body text-sm leading-5 text-ink-800">{value}</Text>
     </View>
   );
@@ -99,14 +95,9 @@ function Field({ label, value }: { label: string; value?: string }) {
 function SummaryBody({ data }: { data: SummarySectionData }) {
   return (
     <View className="gap-3">
-      <Field
-        label="Why this plan is realistic"
-        value={data.whyThisPlanIsRealistic}
-      />
+      <Field label="Why this plan is realistic" value={data.whyThisPlanIsRealistic} />
       <View className="gap-1">
-        <Text className="font-body-semibold text-xs uppercase tracking-wide text-ink-700/60">
-          Strengths
-        </Text>
+        <Text className="font-body-semibold text-xs uppercase tracking-wide text-ink-700/60">Strengths</Text>
         <Bullets items={data.strengths || []} />
       </View>
       <View className="gap-1">
@@ -125,14 +116,8 @@ function NutritionBody({ data }: { data: NutritionSectionData }) {
       <Field label="Breakfast" value={data.breakfastStrategy} />
       <Field label="Lunch" value={data.lunchStrategy} />
       <Field label="Dinner" value={data.dinnerStrategy} />
-      <Field
-        label="Snacks & beverages"
-        value={data.snacksAndBeveragesStrategy}
-      />
-      <Field
-        label="Easiest version for busy days"
-        value={data.easiestVersionForBusyDays}
-      />
+      <Field label="Snacks & beverages" value={data.snacksAndBeveragesStrategy} />
+      <Field label="Easiest version for busy days" value={data.easiestVersionForBusyDays} />
       {data.mealExamples?.length ? (
         <View className="gap-2">
           <Text className="font-body-semibold text-xs uppercase tracking-wide text-ink-700/60">
@@ -140,12 +125,8 @@ function NutritionBody({ data }: { data: NutritionSectionData }) {
           </Text>
           {data.mealExamples.map((ex, i) => (
             <View key={i} className="rounded-xl bg-cream-100 p-3">
-              <Text className="font-body-semibold text-sm text-ink-800">
-                {ex.title}
-              </Text>
-              <Text className="mt-0.5 font-body text-xs leading-4 text-ink-700/85">
-                {ex.description}
-              </Text>
+              <Text className="font-body-semibold text-sm text-ink-800">{ex.title}</Text>
+              <Text className="mt-0.5 font-body text-xs leading-4 text-ink-700/85">{ex.description}</Text>
             </View>
           ))}
         </View>
@@ -155,13 +136,13 @@ function NutritionBody({ data }: { data: NutritionSectionData }) {
 }
 
 const GROCERY_CATEGORIES: { key: keyof GrocerySectionData; label: string }[] = [
-  { key: "proteins", label: "Proteins" },
-  { key: "highFiberCarbohydrates", label: "High-fiber carbs / starches" },
-  { key: "vegetables", label: "Vegetables" },
-  { key: "fruit", label: "Fruit" },
-  { key: "healthyFats", label: "Healthy fats" },
-  { key: "flavorBuilders", label: "Flavor builders / seasonings" },
-  { key: "convenienceFoods", label: "Convenience foods" },
+  { key: 'proteins', label: 'Proteins' },
+  { key: 'highFiberCarbohydrates', label: 'High-fiber carbs / starches' },
+  { key: 'vegetables', label: 'Vegetables' },
+  { key: 'fruit', label: 'Fruit' },
+  { key: 'healthyFats', label: 'Healthy fats' },
+  { key: 'flavorBuilders', label: 'Flavor builders / seasonings' },
+  { key: 'convenienceFoods', label: 'Convenience foods' },
 ];
 
 function GroceryBody({ data }: { data: GrocerySectionData }) {
@@ -172,17 +153,11 @@ function GroceryBody({ data }: { data: GrocerySectionData }) {
         if (!items.length) return null;
         return (
           <View key={key} className="gap-2">
-            <Text className="font-body-semibold text-xs uppercase tracking-wide text-ink-700/60">
-              {label}
-            </Text>
+            <Text className="font-body-semibold text-xs uppercase tracking-wide text-ink-700/60">{label}</Text>
             {items.map((it, i) => (
               <View key={i} className="rounded-xl bg-cream-100 p-3">
-                <Text className="font-body-semibold text-sm text-ink-800">
-                  {it.item}
-                </Text>
-                <Text className="mt-0.5 font-body text-xs leading-4 text-ink-700/85">
-                  {it.why}
-                </Text>
+                <Text className="font-body-semibold text-sm text-ink-800">{it.item}</Text>
+                <Text className="mt-0.5 font-body text-xs leading-4 text-ink-700/85">{it.why}</Text>
               </View>
             ))}
           </View>
@@ -198,13 +173,9 @@ function RecipesBody({ data }: { data: RecipesSectionData }) {
       {(data.recipes || []).map((r, i) => (
         <View key={i} className="rounded-xl bg-cream-100 p-3">
           <View className="flex-row items-center justify-between">
-            <Text className="font-display text-base text-ink-800">
-              {r.name}
-            </Text>
+            <Text className="font-display text-base text-ink-800">{r.name}</Text>
             <View className="rounded-full bg-cream-200 px-2 py-0.5">
-              <Text className="font-body-medium text-[10px] text-ink-700">
-                {r.mealType}
-              </Text>
+              <Text className="font-body-medium text-[10px] text-ink-700">{r.mealType}</Text>
             </View>
           </View>
           <Text className="mt-1 font-body text-xs italic leading-4 text-ink-700/80">
@@ -216,20 +187,15 @@ function RecipesBody({ data }: { data: RecipesSectionData }) {
                 Ingredients
               </Text>
               <Text className="mt-0.5 font-body text-xs leading-5 text-ink-800">
-                {r.ingredients.join(" · ")}
+                {r.ingredients.join(' · ')}
               </Text>
             </View>
           ) : null}
           {r.steps?.length ? (
             <View className="mt-2 gap-1">
-              <Text className="font-body-semibold text-xs uppercase tracking-wide text-ink-700/60">
-                Steps
-              </Text>
+              <Text className="font-body-semibold text-xs uppercase tracking-wide text-ink-700/60">Steps</Text>
               {r.steps.map((s, si) => (
-                <Text
-                  key={si}
-                  className="font-body text-xs leading-5 text-ink-800"
-                >
+                <Text key={si} className="font-body text-xs leading-5 text-ink-800">
                   {si + 1}. {s}
                 </Text>
               ))}
@@ -261,14 +227,8 @@ function ExerciseBody({ data }: { data: ExerciseSectionData }) {
           <Field label="Ideal goal" value={data.idealGoal} />
         </View>
       </View>
-      <Field
-        label="Home-based alternatives"
-        value={data.homeBasedAlternatives}
-      />
-      <Field
-        label="Lower-impact substitutions"
-        value={data.lowerImpactSubstitutions}
-      />
+      <Field label="Home-based alternatives" value={data.homeBasedAlternatives} />
+      <Field label="Lower-impact substitutions" value={data.lowerImpactSubstitutions} />
     </View>
   );
 }
@@ -277,17 +237,12 @@ function BehavioralBody({ data }: { data: BehavioralSectionData }) {
   return (
     <View className="gap-3">
       <View className="gap-1">
-        <Text className="font-body-semibold text-xs uppercase tracking-wide text-ink-700/60">
-          Habit goals
-        </Text>
+        <Text className="font-body-semibold text-xs uppercase tracking-wide text-ink-700/60">Habit goals</Text>
         <Bullets items={data.habitGoals || []} />
       </View>
       <Field label="Self-monitoring" value={data.selfMonitoringSuggestions} />
       <Field label="Handling missed days" value={data.handlingMissedDays} />
-      <Field
-        label="Stress & disruption strategy"
-        value={data.stressAndDisruptionStrategy}
-      />
+      <Field label="Stress & disruption strategy" value={data.stressAndDisruptionStrategy} />
     </View>
   );
 }
@@ -297,24 +252,14 @@ function WeeklyPlanBody({ data }: { data: WeeklyPlanSectionData }) {
     <View className="gap-4">
       {(data.weeks || []).map((week) => (
         <View key={week.weekNumber} className="gap-2">
-          <Text className="font-display text-base text-ink-800">
-            Week {week.weekNumber}
-          </Text>
+          <Text className="font-display text-base text-ink-800">Week {week.weekNumber}</Text>
           {week.days.map((day, i) => (
             <View key={i} className="rounded-xl bg-cream-100 p-3">
-              <Text className="font-body-semibold text-sm text-ink-800">
-                {day.day}
-              </Text>
+              <Text className="font-body-semibold text-sm text-ink-800">{day.day}</Text>
               <Field label="Nutrition focus" value={day.nutritionFocus} />
               <Field label="Meals" value={day.mealGuidance} />
-              <Field
-                label="Physical activity"
-                value={day.physicalActivityGoal}
-              />
-              <Field
-                label="Strength / mobility"
-                value={day.strengthOrMobilityGoal}
-              />
+              <Field label="Physical activity" value={day.physicalActivityGoal} />
+              <Field label="Strength / mobility" value={day.strengthOrMobilityGoal} />
               <Field label="Behavioral task" value={day.behavioralTask} />
               <Field label="Notes" value={day.notes} />
             </View>
@@ -346,33 +291,30 @@ function SafetyBody({ data }: { data: SafetySectionData }) {
   return (
     <View className="gap-3">
       <Bullets items={data.flags || []} />
-      <Field
-        label="Clinician clearance notes"
-        value={data.clinicianClearanceNotes}
-      />
+      <Field label="Clinician clearance notes" value={data.clinicianClearanceNotes} />
     </View>
   );
 }
 
 function SectionBody({ section }: { section: ReportSection }) {
   switch (section.key) {
-    case "summary":
+    case 'summary':
       return <SummaryBody data={section.data} />;
-    case "nutrition":
+    case 'nutrition':
       return <NutritionBody data={section.data} />;
-    case "grocery":
+    case 'grocery':
       return <GroceryBody data={section.data} />;
-    case "recipes":
+    case 'recipes':
       return <RecipesBody data={section.data} />;
-    case "exercise":
+    case 'exercise':
       return <ExerciseBody data={section.data} />;
-    case "behavioral":
+    case 'behavioral':
       return <BehavioralBody data={section.data} />;
-    case "weeklyPlan":
+    case 'weeklyPlan':
       return <WeeklyPlanBody data={section.data} />;
-    case "progression":
+    case 'progression':
       return <ProgressionBody data={section.data} />;
-    case "safety":
+    case 'safety':
       return <SafetyBody data={section.data} />;
     default:
       return null;
@@ -386,13 +328,8 @@ interface ReportSectionCardProps {
   onRegenerate?: (instruction: string) => Promise<void>;
 }
 
-export function ReportSectionCard({
-  section,
-  index = 0,
-  readOnly,
-  onRegenerate,
-}: ReportSectionCardProps) {
-  const [instruction, setInstruction] = useState("");
+export function ReportSectionCard({ section, index = 0, readOnly, onRegenerate }: ReportSectionCardProps) {
+  const [instruction, setInstruction] = useState('');
   const [loading, setLoading] = useState(false);
   const Icon = SECTION_ICON[section.key];
 
@@ -401,7 +338,7 @@ export function ReportSectionCard({
     setLoading(true);
     try {
       await onRegenerate(instruction.trim());
-      setInstruction("");
+      setInstruction('');
     } finally {
       setLoading(false);
     }
@@ -411,22 +348,16 @@ export function ReportSectionCard({
     <Reveal index={index}>
       <Card>
         <View className="flex-row items-center gap-3">
-          <View
-            className={`h-11 w-11 items-center justify-center rounded-2xl ${SECTION_TINT[section.key]}`}
-          >
+          <View className={`h-11 w-11 items-center justify-center rounded-2xl ${SECTION_TINT[section.key]}`}>
             <Icon size={20} color={SECTION_ICON_COLOR[section.key]} />
           </View>
           <View className="flex-1">
-            <Text className="font-display text-lg text-ink-800">
-              {SECTION_LABELS[section.key]}
-            </Text>
+            <Text className="font-display text-lg text-ink-800">{SECTION_LABELS[section.key]}</Text>
           </View>
           {section.version > 1 ? (
             <View className="flex-row items-center gap-1 rounded-full bg-cream-200 px-2 py-1">
-              <History size={12} color="#F2F2F5" />
-              <Text className="font-body-medium text-[10px] text-ink-800">
-                v{section.version}
-              </Text>
+              <History size={12} color="#64748B" />
+              <Text className="font-body-medium text-[10px] text-ink-800">v{section.version}</Text>
             </View>
           ) : null}
         </View>
@@ -461,7 +392,7 @@ export function ReportSectionCard({
                   value={instruction}
                   onChangeText={setInstruction}
                   placeholder='e.g. "Make the breakfast options strictly vegetarian"'
-                  placeholderTextColor="#6E6E78"
+                  placeholderTextColor="#94A3B8"
                   multiline
                   className="flex-1 rounded-xl bg-cream-100 px-3 py-2 font-body text-sm text-ink-800"
                 />

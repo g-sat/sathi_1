@@ -54,7 +54,7 @@ export function ScreenHeader({
             accessibilityLabel="Go back"
             className="mt-0.5 h-10 w-10 items-center justify-center rounded-full border border-cream-300 bg-cream-50"
           >
-            <ArrowLeft size={18} color="#F2F2F5" />
+            <ArrowLeft size={18} color="#1E293B" />
           </Pressable>
         ) : showMenu ? (
           <Pressable
@@ -62,7 +62,7 @@ export function ScreenHeader({
             accessibilityLabel="Open menu"
             className="mt-0.5 h-10 w-10 items-center justify-center rounded-full border border-cream-300 bg-cream-50"
           >
-            <Menu size={18} color="#F2F2F5" />
+            <Menu size={18} color="#1E293B" />
           </Pressable>
         ) : null}
         <View className="flex-1">

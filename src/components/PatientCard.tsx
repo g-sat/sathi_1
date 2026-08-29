@@ -22,7 +22,7 @@ export function PatientCard({ patient, onPress, isLast }: PatientCardProps) {
         <View className="flex-1 gap-0.5">
           <Text className="font-body-semibold text-sm text-ink-800">{patient.name}</Text>
           <View className="flex-row items-center gap-1">
-            <MapPin size={12} color="#67E8F9" />
+            <MapPin size={12} color="#0891B2" />
             <Text className="font-body text-xs text-ink-700/70">
               {patient.state}, {patient.region} · {patient.localLanguage}
             </Text>
@@ -32,7 +32,7 @@ export function PatientCard({ patient, onPress, isLast }: PatientCardProps) {
         <Badge tone={status === 'published' ? 'published' : status === 'draft' ? 'draft' : 'neutral'}>
           {status === 'none' ? 'No plan' : status}
         </Badge>
-        <ChevronRight size={16} color="#6E6E78" />
+        <ChevronRight size={16} color="#94A3B8" />
       </View>
     </Pressable>
   );

@@ -49,7 +49,7 @@ export function AIThinking({ label = 'Generating culturally-tailored plan…' }:
   return (
     <View className="flex-row items-center gap-3 rounded-2xl border border-cream-300 bg-cream-50 px-4 py-4">
       <Animated.View style={iconStyle}>
-        <Sparkles size={22} color="#8B5CF6" />
+        <Sparkles size={22} color="#2563EB" />
       </Animated.View>
       <Text className="flex-1 font-body-medium text-sm text-ink-800">{label}</Text>
       <View className="flex-row gap-1">

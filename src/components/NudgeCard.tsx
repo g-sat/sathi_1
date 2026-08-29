@@ -9,7 +9,7 @@ export function NudgeCard({ nudge }: { nudge: NudgeDTO | null }) {
       entering={FadeIn.duration(380)}
       className="gap-2 rounded-3xl bg-terracotta-500 p-5"
       style={{
-        shadowColor: '#8B5CF6',
+        shadowColor: '#1D4ED8',
         shadowOffset: { width: 0, height: 8 },
         shadowOpacity: 0.28,
         shadowRadius: 20,

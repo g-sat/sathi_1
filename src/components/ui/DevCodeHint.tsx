@@ -11,7 +11,7 @@ export function DevCodeHint({ code }: { code?: string | null }) {
   if (!code) return null;
   return (
     <View className="flex-row items-center gap-2.5 rounded-2xl bg-mustard-50 px-4 py-3.5">
-      <FlaskConical size={16} color="#FBBF24" />
+      <FlaskConical size={16} color="#D97706" />
       <Text className="flex-1 font-body-medium text-xs text-mustard-700">
         Couldn't deliver the email (Resend sandbox limit) — dev code auto-filled below: {code}
       </Text>

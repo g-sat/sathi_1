@@ -52,7 +52,7 @@ export default function PatientHome() {
         <Card>
           <View className="flex-row items-center gap-3">
             <View className="h-12 w-12 items-center justify-center rounded-xl bg-terracotta-100">
-              <Sparkles size={20} color="#C4B5FD" />
+              <Sparkles size={20} color="#3B82F6" />
             </View>
             <View className="flex-1">
               <Text className="font-body-semibold text-base text-ink-800">Your personalized plan</Text>
@@ -65,7 +65,7 @@ export default function PatientHome() {
             <Button
               variant="secondary"
               onPress={() => router.push('/patient/plan')}
-              icon={<ClipboardList size={16} color="#F2F2F5" />}
+              icon={<ClipboardList size={16} color="#1E293B" />}
               disabled={!report}
               fullWidth
             >
@@ -79,7 +79,7 @@ export default function PatientHome() {
         <Card>
           <View className="flex-row items-center gap-3">
             <View className="h-12 w-12 items-center justify-center rounded-xl bg-teal-100">
-              <NotebookPen size={20} color="#67E8F9" />
+              <NotebookPen size={20} color="#0E7490" />
             </View>
             <View className="flex-1">
               <Text className="font-body-semibold text-base text-ink-800">Daily tracker</Text>

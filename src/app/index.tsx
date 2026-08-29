@@ -22,7 +22,7 @@ export default function Landing() {
   return (
     <ScreenScaffold contentClassName="pt-8">
       <Animated.View entering={ZoomIn.duration(500)} className="items-center gap-3">
-        <GradientIconTile colors={['#A78BFA', '#7C3AED']} size={72}>
+        <GradientIconTile colors={['#60A5FA', '#1D4ED8']} size={72}>
           <HeartPulse size={34} color="#FFFFFF" strokeWidth={2.2} />
         </GradientIconTile>
         <Text className="mt-1 font-display text-[2.75rem] leading-[3rem] tracking-tight text-ink-800">
