@@ -12,11 +12,11 @@ export function Card({ padded = true, tone = 'white', style, ...props }: CardPro
       className={`rounded-2xl border border-cream-300 ${tone === 'white' ? 'bg-cream-50' : 'bg-cream-100'} ${padded ? 'p-5' : ''} ${props.className || ''}`}
       style={[
         {
-          shadowColor: '#000000',
-          shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: 0.24,
-          shadowRadius: 12,
-          elevation: 3,
+          shadowColor: '#1E3A5F',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.07,
+          shadowRadius: 10,
+          elevation: 2,
         },
         style,
       ]}

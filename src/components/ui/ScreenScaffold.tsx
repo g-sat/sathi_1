@@ -16,7 +16,7 @@ export function ScreenScaffold({
   scrollProps,
 }: ScreenScaffoldProps) {
   return (
-    <SafeAreaView className="flex-1 bg-cream-100" edges={['top', 'left', 'right']} style={{ backgroundColor: '#0A0A0F' }}>
+    <SafeAreaView className="flex-1 bg-cream-100" edges={['top', 'left', 'right']} style={{ backgroundColor: '#F8FAFC' }}>
       {scroll ? (
         <ScrollView
           className="flex-1"

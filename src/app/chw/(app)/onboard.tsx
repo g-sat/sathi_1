@@ -1,38 +1,32 @@
-import { AIThinking } from "@/components/ui/AIThinking";
-import { Button } from "@/components/ui/Button";
-import { Card } from "@/components/ui/Card";
-import { ChipSelect } from "@/components/ui/ChipSelect";
-import { ErrorBanner } from "@/components/ui/ErrorBanner";
-import { Input } from "@/components/ui/Input";
-import { Reveal } from "@/components/ui/Reveal";
-import { ScreenHeader } from "@/components/ui/ScreenHeader";
-import { ScreenScaffold } from "@/components/ui/ScreenScaffold";
-import { StepIndicator } from "@/components/ui/StepIndicator";
-import { useSession } from "@/context/SessionContext";
-import { api } from "@/lib/api";
+import { useMemo, useState } from 'react';
+import { Text, View } from 'react-native';
+import { router } from 'expo-router';
+import { ArrowRight, Sparkles } from 'lucide-react-native';
+import { ScreenScaffold } from '@/components/ui/ScreenScaffold';
+import { ScreenHeader } from '@/components/ui/ScreenHeader';
+import { Card } from '@/components/ui/Card';
+import { Input } from '@/components/ui/Input';
+import { ChipSelect } from '@/components/ui/ChipSelect';
+import { Button } from '@/components/ui/Button';
+import { StepIndicator } from '@/components/ui/StepIndicator';
+import { AIThinking } from '@/components/ui/AIThinking';
+import { ErrorBanner } from '@/components/ui/ErrorBanner';
+import { Reveal } from '@/components/ui/Reveal';
+import { useSession } from '@/context/SessionContext';
+import { api } from '@/lib/api';
 import {
-    ACTIVITY_LEVELS,
-    DIETARY_PATTERNS,
-    IMMIGRATION_STATUSES,
-    LOCAL_LANGUAGES,
-    REGIONS,
-    STATES_BY_REGION,
-} from "@/lib/constants";
-import type { LocalLanguage, Region } from "@/types";
-import { router } from "expo-router";
-import { ArrowRight, Sparkles } from "lucide-react-native";
-import { useMemo, useState } from "react";
-import { Text, View } from "react-native";
+  ACTIVITY_LEVELS,
+  DIETARY_PATTERNS,
+  IMMIGRATION_STATUSES,
+  LOCAL_LANGUAGES,
+  REGIONS,
+  STATES_BY_REGION,
+} from '@/lib/constants';
+import type { LocalLanguage, Region } from '@/types';
 
 type FormState = Record<string, string | boolean | undefined>;
 
-const STEPS = [
-  "Identity & Region",
-  "Clinical Baseline",
-  "Life & Culture",
-  "Current Diet",
-  "Activity & Movement",
-];
+const STEPS = ['Identity & Region', 'Clinical Baseline', 'Life & Culture', 'Current Diet', 'Activity & Movement'];
 
 function Field({
   label,
@@ -49,14 +43,14 @@ function Field({
   form: FormState;
   set: (key: string, value: string) => void;
   placeholder?: string;
-  keyboardType?: "default" | "numeric";
+  keyboardType?: 'default' | 'numeric';
   multiline?: boolean;
   hint?: string;
 }) {
   return (
     <Input
       label={label}
-      value={(form[formKey] as string) || ""}
+      value={(form[formKey] as string) || ''}
       onChangeText={(v) => set(formKey, v)}
       placeholder={placeholder}
       keyboardType={keyboardType}
@@ -71,43 +65,28 @@ export default function OnboardPatient() {
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<FormState>({});
   const [region, setRegion] = useState<Region>();
-  const [gender, setGender] = useState<"Male" | "Female" | "Other">();
+  const [gender, setGender] = useState<'Male' | 'Female' | 'Other'>();
   const [localLanguage, setLocalLanguage] = useState<LocalLanguage>();
-  const [activityLevel, setActivityLevel] =
-    useState<(typeof ACTIVITY_LEVELS)[number]>();
-  const [dietaryPattern, setDietaryPattern] =
-    useState<(typeof DIETARY_PATTERNS)[number]>();
-  const [immigrationStatus, setImmigrationStatus] =
-    useState<(typeof IMMIGRATION_STATUSES)[number]>();
-  const [familyHistory, setFamilyHistory] = useState<"Yes" | "No">();
-  const [safeWalkingArea, setSafeWalkingArea] = useState<"Yes" | "No">();
+  const [activityLevel, setActivityLevel] = useState<(typeof ACTIVITY_LEVELS)[number]>();
+  const [dietaryPattern, setDietaryPattern] = useState<(typeof DIETARY_PATTERNS)[number]>();
+  const [immigrationStatus, setImmigrationStatus] = useState<(typeof IMMIGRATION_STATUSES)[number]>();
+  const [familyHistory, setFamilyHistory] = useState<'Yes' | 'No'>();
+  const [safeWalkingArea, setSafeWalkingArea] = useState<'Yes' | 'No'>();
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const stateOptions = useMemo(
-    () => (region ? STATES_BY_REGION[region] : []),
-    [region],
-  );
+  const stateOptions = useMemo(() => (region ? STATES_BY_REGION[region] : []), [region]);
 
   function set(key: string, value: string) {
     setForm((f) => ({ ...f, [key]: value }));
   }
 
-  const step0Valid = !!(
-    form.name &&
-    form.age &&
-    gender &&
-    region &&
-    form.state &&
-    localLanguage
-  );
+  const step0Valid = !!(form.name && form.age && gender && region && form.state && localLanguage);
 
   function goNext() {
     if (step === 0 && !step0Valid) {
-      setError(
-        "Please fill in all required fields (marked with *) before continuing.",
-      );
+      setError('Please fill in all required fields (marked with *) before continuing.');
       return;
     }
     setError(null);
@@ -120,9 +99,9 @@ export default function OnboardPatient() {
   }
 
   async function handleSubmit() {
-    if (!session || session.role !== "chw") return;
+    if (!session || session.role !== 'chw') return;
     if (!step0Valid) {
-      setError("Please fill in the required fields (marked with *).");
+      setError('Please fill in the required fields (marked with *).');
       setStep(0);
       return;
     }
@@ -141,11 +120,11 @@ export default function OnboardPatient() {
         heightInches: form.heightInches,
         weightLbs: form.weightLbs,
         waistCircumferenceCm: form.waistCircumferenceCm,
-        familyHistoryDiabetes: familyHistory === "Yes",
+        familyHistoryDiabetes: familyHistory === 'Yes',
         fastingGlucose: form.fastingGlucose,
         hba1c: form.hba1c,
-        physicalActivityLevel: activityLevel || "Sedentary",
-        dietaryPattern: dietaryPattern || "Vegetarian",
+        physicalActivityLevel: activityLevel || 'Sedentary',
+        dietaryPattern: dietaryPattern || 'Vegetarian',
 
         raceEthnicity: form.raceEthnicity,
         immigrationStatus,
@@ -181,7 +160,7 @@ export default function OnboardPatient() {
         averageDailySteps: form.averageDailySteps,
         functionalLimitations: form.functionalLimitations,
         equipmentAccess: form.equipmentAccess,
-        safeWalkingArea: safeWalkingArea === "Yes",
+        safeWalkingArea: safeWalkingArea === 'Yes',
         enjoyedMovementForms: form.enjoyedMovementForms,
         dislikedMovementForms: form.dislikedMovementForms,
 
@@ -202,7 +181,7 @@ export default function OnboardPatient() {
       }
       router.replace(`/chw/patient/${patient.id}/review`);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Something went wrong.");
+      setError(e instanceof Error ? e.message : 'Something went wrong.');
     } finally {
       setSubmitting(false);
     }
@@ -227,27 +206,9 @@ export default function OnboardPatient() {
             <Text className="font-body-semibold text-sm uppercase tracking-wide text-ink-700/70">
               Basic details
             </Text>
-            <Field
-              label="Full name *"
-              formKey="name"
-              form={form}
-              set={set}
-              placeholder="Patient's name"
-            />
-            <Field
-              label="Age *"
-              formKey="age"
-              form={form}
-              set={set}
-              keyboardType="numeric"
-              placeholder="e.g. 45"
-            />
-            <ChipSelect
-              label="Gender *"
-              options={["Male", "Female", "Other"] as const}
-              value={gender}
-              onChange={setGender}
-            />
+            <Field label="Full name *" formKey="name" form={form} set={set} placeholder="Patient's name" />
+            <Field label="Age *" formKey="age" form={form} set={set} keyboardType="numeric" placeholder="e.g. 45" />
+            <ChipSelect label="Gender *" options={['Male', 'Female', 'Other'] as const} value={gender} onChange={setGender} />
 
             <Text className="mt-2 font-body-semibold text-sm uppercase tracking-wide text-ink-700/70">
               Region &amp; language
@@ -258,7 +219,7 @@ export default function OnboardPatient() {
               value={region}
               onChange={(r) => {
                 setRegion(r);
-                set("state", "");
+                set('state', '');
               }}
             />
             {region ? (
@@ -266,7 +227,7 @@ export default function OnboardPatient() {
                 label="State / Province *"
                 options={stateOptions}
                 value={form.state as string | undefined}
-                onChange={(v) => set("state", v)}
+                onChange={(v) => set('state', v)}
               />
             ) : null}
             <ChipSelect
@@ -287,115 +248,34 @@ export default function OnboardPatient() {
             </Text>
             <View className="flex-row gap-3">
               <View className="flex-1">
-                <Field
-                  label="Height (feet)"
-                  formKey="heightFeet"
-                  form={form}
-                  set={set}
-                  keyboardType="numeric"
-                />
+                <Field label="Height (feet)" formKey="heightFeet" form={form} set={set} keyboardType="numeric" />
               </View>
               <View className="flex-1">
-                <Field
-                  label="Height (inches)"
-                  formKey="heightInches"
-                  form={form}
-                  set={set}
-                  keyboardType="numeric"
-                />
+                <Field label="Height (inches)" formKey="heightInches" form={form} set={set} keyboardType="numeric" />
               </View>
             </View>
-            <Field
-              label="Weight (lb)"
-              formKey="weightLbs"
-              form={form}
-              set={set}
-              keyboardType="numeric"
-            />
-            <Field
-              label="Waist circumference (cm)"
-              formKey="waistCircumferenceCm"
-              form={form}
-              set={set}
-              keyboardType="numeric"
-            />
+            <Field label="Weight (lb)" formKey="weightLbs" form={form} set={set} keyboardType="numeric" />
+            <Field label="Waist circumference (cm)" formKey="waistCircumferenceCm" form={form} set={set} keyboardType="numeric" />
             <View className="flex-row gap-3">
               <View className="flex-1">
-                <Field
-                  label="Fasting glucose (mg/dL)"
-                  formKey="fastingGlucose"
-                  form={form}
-                  set={set}
-                  keyboardType="numeric"
-                />
+                <Field label="Fasting glucose (mg/dL)" formKey="fastingGlucose" form={form} set={set} keyboardType="numeric" />
               </View>
               <View className="flex-1">
-                <Field
-                  label="HbA1c (%)"
-                  formKey="hba1c"
-                  form={form}
-                  set={set}
-                  keyboardType="numeric"
-                />
+                <Field label="HbA1c (%)" formKey="hba1c" form={form} set={set} keyboardType="numeric" />
               </View>
             </View>
-            <ChipSelect
-              label="Family history of diabetes"
-              options={["Yes", "No"] as const}
-              value={familyHistory}
-              onChange={setFamilyHistory}
-            />
-            <ChipSelect
-              label="Current activity level"
-              options={ACTIVITY_LEVELS}
-              value={activityLevel}
-              onChange={setActivityLevel}
-            />
-            <ChipSelect
-              label="Dietary pattern"
-              options={DIETARY_PATTERNS}
-              value={dietaryPattern}
-              onChange={setDietaryPattern}
-            />
+            <ChipSelect label="Family history of diabetes" options={['Yes', 'No'] as const} value={familyHistory} onChange={setFamilyHistory} />
+            <ChipSelect label="Current activity level" options={ACTIVITY_LEVELS} value={activityLevel} onChange={setActivityLevel} />
+            <ChipSelect label="Dietary pattern" options={DIETARY_PATTERNS} value={dietaryPattern} onChange={setDietaryPattern} />
 
             <Text className="mt-2 font-body-semibold text-sm uppercase tracking-wide text-ink-700/70">
               Comorbidities &amp; clinical context
             </Text>
-            <Field
-              label="Comorbidities"
-              formKey="comorbidities"
-              form={form}
-              set={set}
-              placeholder="e.g. Prediabetes, Type 2 diabetes"
-            />
-            <Field
-              label="Relevant symptoms"
-              formKey="relevantSymptoms"
-              form={form}
-              set={set}
-              multiline
-            />
-            <Field
-              label="Medications"
-              formKey="medications"
-              form={form}
-              set={set}
-              placeholder="e.g. Metformin"
-            />
-            <Field
-              label="Exercise restrictions / precautions"
-              formKey="exerciseRestrictions"
-              form={form}
-              set={set}
-              multiline
-            />
-            <Field
-              label="Dietary restrictions / allergies / intolerances"
-              formKey="dietaryRestrictionsAllergies"
-              form={form}
-              set={set}
-              multiline
-            />
+            <Field label="Comorbidities" formKey="comorbidities" form={form} set={set} placeholder="e.g. Prediabetes, Type 2 diabetes" />
+            <Field label="Relevant symptoms" formKey="relevantSymptoms" form={form} set={set} multiline />
+            <Field label="Medications" formKey="medications" form={form} set={set} placeholder="e.g. Metformin" />
+            <Field label="Exercise restrictions / precautions" formKey="exerciseRestrictions" form={form} set={set} multiline />
+            <Field label="Dietary restrictions / allergies / intolerances" formKey="dietaryRestrictionsAllergies" form={form} set={set} multiline />
           </Card>
         </Reveal>
       ) : null}
@@ -406,26 +286,9 @@ export default function OnboardPatient() {
             <Text className="font-body-semibold text-sm uppercase tracking-wide text-ink-700/70">
               Life &amp; cultural context
             </Text>
-            <Field
-              label="Race / ethnicity"
-              formKey="raceEthnicity"
-              form={form}
-              set={set}
-              placeholder="e.g. Indian"
-            />
-            <ChipSelect
-              label="Immigration status"
-              options={IMMIGRATION_STATUSES}
-              value={immigrationStatus}
-              onChange={setImmigrationStatus}
-            />
-            <Field
-              label="Years in current country"
-              formKey="yearsInCountry"
-              form={form}
-              set={set}
-              keyboardType="numeric"
-            />
+            <Field label="Race / ethnicity" formKey="raceEthnicity" form={form} set={set} placeholder="e.g. Indian" />
+            <ChipSelect label="Immigration status" options={IMMIGRATION_STATUSES} value={immigrationStatus} onChange={setImmigrationStatus} />
+            <Field label="Years in current country" formKey="yearsInCountry" form={form} set={set} keyboardType="numeric" />
             <Field
               label="Cultural background / food traditions"
               formKey="culturalFoodTraditions"
@@ -434,61 +297,14 @@ export default function OnboardPatient() {
               multiline
               placeholder="e.g. South Indian foods, no red meat"
             />
-            <Field
-              label="Language / literacy notes"
-              formKey="languageLiteracyNotes"
-              form={form}
-              set={set}
-            />
-            <Field
-              label="Occupation / daily routine"
-              formKey="occupationDailyRoutine"
-              form={form}
-              set={set}
-              multiline
-            />
-            <Field
-              label="Family / home responsibilities"
-              formKey="familyHomeResponsibilities"
-              form={form}
-              set={set}
-              multiline
-            />
-            <Field
-              label="Budget / food insecurity concerns"
-              formKey="budgetConcerns"
-              form={form}
-              set={set}
-            />
-            <Field
-              label="Primary goals"
-              formKey="primaryGoals"
-              form={form}
-              set={set}
-              multiline
-              placeholder="e.g. Improve glucose, maintain healthy lifestyle"
-            />
-            <Field
-              label="Time available for meal prep"
-              formKey="mealPrepTimeAvailable"
-              form={form}
-              set={set}
-              placeholder="e.g. 3-4 hours"
-            />
-            <Field
-              label="Sleep pattern"
-              formKey="sleepPattern"
-              form={form}
-              set={set}
-              multiline
-            />
-            <Field
-              label="Stress level / major stressors"
-              formKey="stressLevel"
-              form={form}
-              set={set}
-              multiline
-            />
+            <Field label="Language / literacy notes" formKey="languageLiteracyNotes" form={form} set={set} />
+            <Field label="Occupation / daily routine" formKey="occupationDailyRoutine" form={form} set={set} multiline />
+            <Field label="Family / home responsibilities" formKey="familyHomeResponsibilities" form={form} set={set} multiline />
+            <Field label="Budget / food insecurity concerns" formKey="budgetConcerns" form={form} set={set} />
+            <Field label="Primary goals" formKey="primaryGoals" form={form} set={set} multiline placeholder="e.g. Improve glucose, maintain healthy lifestyle" />
+            <Field label="Time available for meal prep" formKey="mealPrepTimeAvailable" form={form} set={set} placeholder="e.g. 3-4 hours" />
+            <Field label="Sleep pattern" formKey="sleepPattern" form={form} set={set} multiline />
+            <Field label="Stress level / major stressors" formKey="stressLevel" form={form} set={set} multiline />
           </Card>
         </Reveal>
       ) : null}
@@ -499,75 +315,16 @@ export default function OnboardPatient() {
             <Text className="font-body-semibold text-sm uppercase tracking-wide text-ink-700/70">
               Current dietary intake
             </Text>
-            <Field
-              label="Breakfast recall"
-              formKey="breakfastRecall"
-              form={form}
-              set={set}
-              multiline
-            />
-            <Field
-              label="Lunch recall"
-              formKey="lunchRecall"
-              form={form}
-              set={set}
-              multiline
-            />
-            <Field
-              label="Dinner recall"
-              formKey="dinnerRecall"
-              form={form}
-              set={set}
-              multiline
-            />
-            <Field
-              label="Snacks"
-              formKey="snacksRecall"
-              form={form}
-              set={set}
-              multiline
-            />
-            <Field
-              label="Beverages"
-              formKey="beveragesRecall"
-              form={form}
-              set={set}
-              multiline
-            />
-            <Field
-              label="Eating out frequency"
-              formKey="eatingOutFrequency"
-              form={form}
-              set={set}
-            />
-            <Field
-              label="Night / emotional eating, grazing, large portions"
-              formKey="nightEmotionalEatingPattern"
-              form={form}
-              set={set}
-              multiline
-            />
-            <Field
-              label="Protein intake pattern"
-              formKey="proteinIntakePattern"
-              form={form}
-              set={set}
-              multiline
-            />
-            <Field
-              label="Fruit / vegetable intake"
-              formKey="fruitVegIntake"
-              form={form}
-              set={set}
-              multiline
-            />
-            <Field
-              label="Ultra-processed foods / sweets / sugary drinks"
-              formKey="processedFoodsSweetsIntake"
-              form={form}
-              set={set}
-              multiline
-            />
+            <Field label="Breakfast recall" formKey="breakfastRecall" form={form} set={set} multiline />
+            <Field label="Lunch recall" formKey="lunchRecall" form={form} set={set} multiline />
+            <Field label="Dinner recall" formKey="dinnerRecall" form={form} set={set} multiline />
+            <Field label="Snacks" formKey="snacksRecall" form={form} set={set} multiline />
+            <Field label="Beverages" formKey="beveragesRecall" form={form} set={set} multiline />
+            <Field label="Eating out frequency" formKey="eatingOutFrequency" form={form} set={set} />
+            <Field label="Night / emotional eating, grazing, large portions" formKey="nightEmotionalEatingPattern" form={form} set={set} multiline />
+            <Field label="Protein intake pattern" formKey="proteinIntakePattern" form={form} set={set} multiline />
+            <Field label="Fruit / vegetable intake" formKey="fruitVegIntake" form={form} set={set} multiline />
+            <Field label="Ultra-processed foods / sweets / sugary drinks" formKey="processedFoodsSweetsIntake" form={form} set={set} multiline />
           </Card>
         </Reveal>
       ) : null}
@@ -578,54 +335,13 @@ export default function OnboardPatient() {
             <Text className="font-body-semibold text-sm uppercase tracking-wide text-ink-700/70">
               Function &amp; physical activity baseline
             </Text>
-            <Field
-              label="Current exercise routine"
-              formKey="currentExerciseRoutine"
-              form={form}
-              set={set}
-              multiline
-            />
-            <Field
-              label="Average daily steps (if known)"
-              formKey="averageDailySteps"
-              form={form}
-              set={set}
-              keyboardType="numeric"
-            />
-            <Field
-              label="Functional limitations"
-              formKey="functionalLimitations"
-              form={form}
-              set={set}
-              multiline
-              placeholder="e.g. Joint pain in knees"
-            />
-            <Field
-              label="Access to equipment"
-              formKey="equipmentAccess"
-              form={form}
-              set={set}
-              multiline
-              placeholder="e.g. Elliptical, gym membership"
-            />
-            <ChipSelect
-              label="Access to a safe walking area"
-              options={["Yes", "No"] as const}
-              value={safeWalkingArea}
-              onChange={setSafeWalkingArea}
-            />
-            <Field
-              label="Enjoyed forms of movement"
-              formKey="enjoyedMovementForms"
-              form={form}
-              set={set}
-            />
-            <Field
-              label="Disliked forms of movement"
-              formKey="dislikedMovementForms"
-              form={form}
-              set={set}
-            />
+            <Field label="Current exercise routine" formKey="currentExerciseRoutine" form={form} set={set} multiline />
+            <Field label="Average daily steps (if known)" formKey="averageDailySteps" form={form} set={set} keyboardType="numeric" />
+            <Field label="Functional limitations" formKey="functionalLimitations" form={form} set={set} multiline placeholder="e.g. Joint pain in knees" />
+            <Field label="Access to equipment" formKey="equipmentAccess" form={form} set={set} multiline placeholder="e.g. Elliptical, gym membership" />
+            <ChipSelect label="Access to a safe walking area" options={['Yes', 'No'] as const} value={safeWalkingArea} onChange={setSafeWalkingArea} />
+            <Field label="Enjoyed forms of movement" formKey="enjoyedMovementForms" form={form} set={set} />
+            <Field label="Disliked forms of movement" formKey="dislikedMovementForms" form={form} set={set} />
             <Field
               label="CHW notes (optional)"
               formKey="notes"
@@ -653,19 +369,11 @@ export default function OnboardPatient() {
           ) : null}
           <View className="flex-1">
             {isLastStep ? (
-              <Button
-                onPress={handleSubmit}
-                icon={<Sparkles size={16} color="#FFFFFF" />}
-                fullWidth
-              >
+              <Button onPress={handleSubmit} icon={<Sparkles size={16} color="#FFFFFF" />} fullWidth>
                 Save &amp; generate AI plan
               </Button>
             ) : (
-              <Button
-                onPress={goNext}
-                icon={<ArrowRight size={16} color="#FFFFFF" />}
-                fullWidth
-              >
+              <Button onPress={goNext} icon={<ArrowRight size={16} color="#FFFFFF" />} fullWidth>
                 Continue
               </Button>
             )}

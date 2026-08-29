@@ -8,10 +8,10 @@ export default function PatientAppLayout() {
       screenOptions={{
         headerShown: false,
         drawerType: 'front',
-        drawerStyle: { width: 260, backgroundColor: '#16161D' },
-        overlayColor: 'rgba(0,0,0,0.6)',
+        drawerStyle: { width: 260, backgroundColor: '#FFFFFF' },
+        overlayColor: 'rgba(15,23,42,0.25)',
         swipeEdgeWidth: 60,
-        sceneStyle: { backgroundColor: '#0A0A0F' },
+        sceneStyle: { backgroundColor: '#F8FAFC' },
       }}
     >
       <Drawer.Screen name="home" options={{ drawerLabel: 'Home' }} />

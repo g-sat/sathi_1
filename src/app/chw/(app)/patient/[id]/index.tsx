@@ -48,7 +48,7 @@ export default function PatientDetail() {
   if (loading || !patient) {
     return (
       <ScreenScaffold contentClassName="flex-1 items-center justify-center">
-        <ActivityIndicator color="#22D3EE" />
+        <ActivityIndicator color="#2563EB" />
         <ErrorBanner message={error} />
       </ScreenScaffold>
     );
@@ -62,7 +62,7 @@ export default function PatientDetail() {
         <Card className="gap-3">
           <View className="flex-row items-center justify-between">
             <View className="flex-row items-center gap-1">
-              <MapPin size={14} color="#7ED4E0" />
+              <MapPin size={14} color="#0891B2" />
               <Text className="font-body text-sm text-ink-700/85">
                 {patient.state}, {patient.region} · {patient.localLanguage}
               </Text>
@@ -82,7 +82,7 @@ export default function PatientDetail() {
                 setCopied(true);
                 setTimeout(() => setCopied(false), 1500);
               }}
-              icon={<Copy size={14} color="#F2F2F5" />}
+              icon={<Copy size={14} color="#1E293B" />}
             >
               {copied ? 'Copied!' : 'Copy ID'}
             </Button>

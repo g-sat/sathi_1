@@ -31,7 +31,7 @@ export function LogHistoryList({ logs }: { logs: DailyLogDTO[] }) {
               <Text className="font-body-semibold text-sm text-ink-800">{log.date}</Text>
               {log.glucoseLevel != null ? (
                 <View className="flex-row items-center gap-1">
-                  <Droplet size={14} color="#F43F5E" />
+                  <Droplet size={14} color="#E11D48" />
                   <Text className={`font-body-semibold text-sm ${glucoseTone(log.glucoseLevel)}`}>
                     {log.glucoseLevel} mg/dL{log.glucoseTiming ? ` · ${log.glucoseTiming}` : ''}
                   </Text>
@@ -52,7 +52,7 @@ export function LogHistoryList({ logs }: { logs: DailyLogDTO[] }) {
 
             {log.activityMinutes != null ? (
               <View className="flex-row items-center gap-1">
-                <Footprints size={13} color="#22D3EE" />
+                <Footprints size={13} color="#0891B2" />
                 <Text className="font-body text-xs text-ink-700/85">
                   {log.activityMinutes} min {log.activityType ? `· ${log.activityType}` : ''}
                 </Text>

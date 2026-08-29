@@ -58,8 +58,8 @@ export default function ChwDashboard() {
 
       <View className="flex-row gap-3">
         <StatPill icon={<Users size={16} color="#FFFFFF" />} label="Total patients" value={String(patients.length)} tone="highlight" />
-        <StatPill icon={<ClipboardList size={18} color="#FCD34D" />} label="Draft plans" value={String(drafts)} tone="mustard" />
-        <StatPill icon={<Activity size={18} color="#67E8F9" />} label="Published" value={String(published)} tone="teal" />
+        <StatPill icon={<ClipboardList size={18} color="#B45309" />} label="Draft plans" value={String(drafts)} tone="mustard" />
+        <StatPill icon={<Activity size={18} color="#0E7490" />} label="Published" value={String(published)} tone="teal" />
       </View>
 
       <View className="flex-row gap-3">
@@ -69,7 +69,7 @@ export default function ChwDashboard() {
           </Button>
         </View>
         <View className="flex-1">
-          <Button variant="secondary" onPress={() => router.push('/chw/monitor')} icon={<Activity size={16} color="#F2F2F5" />} fullWidth>
+          <Button variant="secondary" onPress={() => router.push('/chw/monitor')} icon={<Activity size={16} color="#1E293B" />} fullWidth>
             Monitor all
           </Button>
         </View>
@@ -83,10 +83,10 @@ export default function ChwDashboard() {
       </View>
 
       {loading ? (
-        <ActivityIndicator className="mt-6" color="#22D3EE" />
+        <ActivityIndicator className="mt-6" color="#2563EB" />
       ) : patients.length === 0 ? (
         <View className="mt-1 items-center gap-2 rounded-2xl border border-dashed border-cream-300 p-8">
-          <Plus size={22} color="#F2F2F5" />
+          <Plus size={22} color="#64748B" />
           <Text className="text-center font-body text-sm text-ink-700/70">
             No patients yet. Onboard your first patient to generate their AI plan.
           </Text>

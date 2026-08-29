@@ -76,7 +76,7 @@ export function SidebarContent(props: DrawerContentComponentProps) {
                   active ? 'bg-terracotta-500' : ''
                 }`}
               >
-                {item.icon(active ? '#FFFFFF' : '#96969F')}
+                {item.icon(active ? '#FFFFFF' : '#64748B')}
                 <Text
                   className={`font-body-medium text-sm ${active ? 'text-white' : 'text-ink-700'}`}
                 >
@@ -101,7 +101,7 @@ export function SidebarContent(props: DrawerContentComponentProps) {
           onPress={handleSignOut}
           className="flex-row items-center gap-2.5 rounded-lg bg-cream-200 px-3 py-2.5"
         >
-          <LogOut size={16} color="#F2F2F5" />
+          <LogOut size={16} color="#1E293B" />
           <Text className="font-body-medium text-sm text-ink-800">Sign out</Text>
         </Pressable>
       </View>

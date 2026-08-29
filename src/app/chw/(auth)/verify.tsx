@@ -68,7 +68,7 @@ export default function ChwVerify() {
       <Card className="mt-6 gap-4">
         <View className="items-center gap-2 py-2">
           <View className="h-14 w-14 items-center justify-center rounded-full bg-teal-50">
-            <MailCheck size={26} color="#8B5CF6" />
+            <MailCheck size={26} color="#2563EB" />
           </View>
           <Text className="text-center font-body text-sm text-ink-700/80">
             We sent a 6-digit code to{'\n'}

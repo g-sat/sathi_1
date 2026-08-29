@@ -36,13 +36,13 @@ export default function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
         <SessionProvider>
-          <StatusBar style="light" />
+          <StatusBar style="dark" />
           <Stack
             screenOptions={{
               headerShown: false,
               animation: 'fade_from_bottom',
               animationDuration: 260,
-              contentStyle: { backgroundColor: '#0A0A0F' },
+              contentStyle: { backgroundColor: '#F8FAFC' },
             }}
           />
         </SessionProvider>

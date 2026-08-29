@@ -28,7 +28,7 @@ export function MonitorRow({
       <Pressable onPress={onPress}>
         <Card className="flex-row items-center gap-3">
           <View className={`h-10 w-10 items-center justify-center rounded-full ${tone.bg}`}>
-            <Droplet size={16} color="#F2F2F5" />
+            <Droplet size={16} color="#FFFFFF" />
           </View>
           <View className="flex-1">
             <Text className="font-body-semibold text-sm text-ink-800">{patient.name}</Text>

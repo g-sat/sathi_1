@@ -2,7 +2,7 @@
 // Kept framework-agnostic (no mongoose imports) so it is safe to import
 // from client bundles.
 
-export type UserRole = "chw" | "patient";
+export type UserRole = 'chw' | 'patient';
 
 export interface UserDTO {
   id: string;
@@ -13,31 +13,26 @@ export interface UserDTO {
   createdAt: string;
 }
 
-export type Region =
-  | "India"
-  | "Pakistan"
-  | "Bangladesh"
-  | "Sri Lanka"
-  | "Nepal";
+export type Region = 'India' | 'Pakistan' | 'Bangladesh' | 'Sri Lanka' | 'Nepal';
 
 export type LocalLanguage =
-  | "Hindi"
-  | "Tamil"
-  | "Telugu"
-  | "Gujarati"
-  | "Punjabi"
-  | "Urdu"
-  | "Bengali"
-  | "Marathi"
-  | "Sinhala"
-  | "Nepali"
-  | "English";
+  | 'Hindi'
+  | 'Tamil'
+  | 'Telugu'
+  | 'Gujarati'
+  | 'Punjabi'
+  | 'Urdu'
+  | 'Bengali'
+  | 'Marathi'
+  | 'Sinhala'
+  | 'Nepali'
+  | 'English';
 
 export type ImmigrationStatus =
-  | "Immigrant"
-  | "First Generation"
-  | "Second Generation"
-  | "Born in Home Country";
+  | 'Immigrant'
+  | 'First Generation'
+  | 'Second Generation'
+  | 'Born in Home Country';
 
 // The clinical intake captured by the CHW during onboarding. This mirrors,
 // field-for-field, the "AI Prompt" template used to hand-author the sample
@@ -52,7 +47,7 @@ export interface PatientProfileDTO {
   // Core identity
   name: string;
   age: number;
-  gender: "Male" | "Female" | "Other";
+  gender: 'Male' | 'Female' | 'Other';
   region: Region;
   state: string;
   localLanguage: LocalLanguage;
@@ -65,8 +60,8 @@ export interface PatientProfileDTO {
   familyHistoryDiabetes: boolean;
   fastingGlucose?: number;
   hba1c?: number;
-  physicalActivityLevel: "Sedentary" | "Light" | "Moderate" | "Active";
-  dietaryPattern: "Vegetarian" | "Non-Vegetarian" | "Eggetarian" | "Vegan";
+  physicalActivityLevel: 'Sedentary' | 'Light' | 'Moderate' | 'Active';
+  dietaryPattern: 'Vegetarian' | 'Non-Vegetarian' | 'Eggetarian' | 'Vegan';
 
   // Immigration / cultural context
   raceEthnicity?: string;
@@ -124,15 +119,15 @@ export interface PatientProfileDTO {
 // ---------------------------------------------------------------------------
 
 export type ReportSectionKey =
-  | "summary"
-  | "nutrition"
-  | "grocery"
-  | "recipes"
-  | "exercise"
-  | "behavioral"
-  | "weeklyPlan"
-  | "progression"
-  | "safety";
+  | 'summary'
+  | 'nutrition'
+  | 'grocery'
+  | 'recipes'
+  | 'exercise'
+  | 'behavioral'
+  | 'weeklyPlan'
+  | 'progression'
+  | 'safety';
 
 export interface SummarySectionData {
   strengths: string[];
@@ -171,7 +166,7 @@ export interface GrocerySectionData {
 
 export interface Recipe {
   name: string;
-  mealType: "Breakfast" | "Lunch" | "Dinner" | "Snack";
+  mealType: 'Breakfast' | 'Lunch' | 'Dinner' | 'Snack';
   whyItFitsThisPatient: string;
   ingredients: string[];
   steps: string[];
@@ -261,7 +256,7 @@ export type ReportSection = {
   };
 }[ReportSectionKey];
 
-export type ReportStatus = "draft" | "published";
+export type ReportStatus = 'draft' | 'published';
 
 export interface InterventionReportDTO {
   id: string;
@@ -279,11 +274,8 @@ export interface DailyLogDTO {
   patientId: string;
   date: string;
   glucoseLevel?: number;
-  glucoseTiming?: "Fasting" | "Post-Meal" | "Random";
-  meals: {
-    type: "Breakfast" | "Lunch" | "Dinner" | "Snack";
-    description: string;
-  }[];
+  glucoseTiming?: 'Fasting' | 'Post-Meal' | 'Random';
+  meals: { type: 'Breakfast' | 'Lunch' | 'Dinner' | 'Snack'; description: string }[];
   activityMinutes?: number;
   activityType?: string;
   moodNote?: string;
