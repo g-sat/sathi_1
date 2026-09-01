@@ -32,7 +32,7 @@ export default function ChwVerify() {
     }
     setLoading(true);
     try {
-      const { user, token } = await api.verifyEmail('chw', email, code.trim());
+      const { user, token } = await api.verifyEmail(email, code.trim());
       if (user && token) {
         await signInChw(user, token);
         router.replace('/chw/dashboard');
@@ -48,7 +48,7 @@ export default function ChwVerify() {
     setError(null);
     setResending(true);
     try {
-      const { devCode: freshCode } = await api.resendCode('chw', email);
+      const { devCode: freshCode } = await api.resendCode(email);
       if (freshCode) {
         setDevCode(freshCode);
         setCode(freshCode);

@@ -6,13 +6,10 @@ import { serializeReport } from '@/server/serialize';
 import { jsonError, safeJson } from '@/server/http';
 import { withSession } from '@/server/auth';
 
-async function assertCanAccessPatient(session: { role: string; sub: string; patientProfileId?: string }, patientId: string) {
+async function assertCanAccessPatient(session: { sub: string }, patientId: string) {
   const patient = await PatientProfile.findById(patientId).lean();
   if (!patient) return { patient: null, error: jsonError(404, 'Patient not found.') };
-
-  const isOwnerChw = session.role === 'chw' && String(patient.chwId) === session.sub;
-  const isOwnPatient = session.role === 'patient' && session.patientProfileId === String(patient._id);
-  if (!isOwnerChw && !isOwnPatient) {
+  if (String(patient.chwId) !== session.sub) {
     return { patient: null, error: jsonError(403, 'You are not authorized to view this report.') };
   }
   return { patient, error: null };

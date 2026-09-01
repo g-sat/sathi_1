@@ -23,7 +23,7 @@ export default function ChwForgotPassword() {
     }
     setLoading(true);
     try {
-      const { devCode } = await api.requestPasswordReset('chw', email.trim());
+      const { devCode } = await api.requestPasswordReset(email.trim());
       router.replace({ pathname: '/chw/reset-password', params: { email: email.trim(), devCode } });
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Something went wrong.');

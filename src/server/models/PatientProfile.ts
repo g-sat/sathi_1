@@ -3,7 +3,7 @@ import mongoose, { Schema, type InferSchemaType, type Model } from 'mongoose';
 const PatientProfileSchema = new Schema(
   {
     patientId: { type: String, required: true, unique: true, index: true },
-    userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    userId: { type: Schema.Types.ObjectId, ref: 'User' },
     chwId: { type: Schema.Types.ObjectId, ref: 'User', required: true, index: true },
 
     // Core identity

@@ -57,8 +57,7 @@ function getSecret(): string {
 
 export interface SessionPayload {
   sub: string; // User _id
-  role: 'chw' | 'patient';
-  patientProfileId?: string;
+  role: 'chw';
   exp: number;
 }
 
@@ -101,7 +100,7 @@ class AuthError extends Error {
 }
 
 /** Throws an AuthError (catch with `authErrorResponse`) if there is no valid session. */
-export function requireSession(request: Request, role?: 'chw' | 'patient'): SessionPayload {
+export function requireSession(request: Request, role?: 'chw'): SessionPayload {
   const session = verifySessionToken(getBearerToken(request));
   if (!session) throw new AuthError(401, 'Your session has expired. Please sign in again.');
   if (role && session.role !== role) throw new AuthError(403, 'You are not authorized to do that.');
@@ -111,7 +110,7 @@ export function requireSession(request: Request, role?: 'chw' | 'patient'): Sess
 /** Wraps `requireSession` so route handlers can `return` a JSON error in one line. */
 export function withSession(
   request: Request,
-  role?: 'chw' | 'patient'
+  role?: 'chw'
 ): { session: SessionPayload; error?: undefined } | { session?: undefined; error: Response } {
   try {
     return { session: requireSession(request, role) };

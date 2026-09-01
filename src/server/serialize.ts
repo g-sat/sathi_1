@@ -1,7 +1,6 @@
 import type {
   DailyLogDTO,
   InterventionReportDTO,
-  NudgeDTO,
   PatientProfileDTO,
   UserDTO,
 } from '@/types';
@@ -28,7 +27,7 @@ export function serializePatient(doc: any): PatientProfileDTO {
   return {
     id: idOf(doc._id),
     patientId: doc.patientId,
-    userId: idOf(doc.userId),
+    userId: doc.userId ? idOf(doc.userId) : undefined,
     chwId: idOf(doc.chwId),
 
     name: doc.name,
@@ -124,13 +123,3 @@ export function serializeLog(doc: any): DailyLogDTO {
   };
 }
 
-export function serializeNudge(doc: any): NudgeDTO {
-  return {
-    id: idOf(doc._id),
-    patientId: idOf(doc.patientId),
-    date: doc.date,
-    language: doc.language,
-    message: doc.message,
-    translatedMessage: doc.translatedMessage,
-  };
-}

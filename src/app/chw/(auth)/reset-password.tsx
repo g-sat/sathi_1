@@ -28,7 +28,7 @@ export default function ChwResetPassword() {
     }
     setLoading(true);
     try {
-      await api.resetPassword('chw', email.trim(), code.trim(), newPassword);
+      await api.resetPassword(email.trim(), code.trim(), newPassword);
       setDone(true);
       setTimeout(() => router.replace('/chw/login'), 1200);
     } catch (e) {

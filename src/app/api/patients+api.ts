@@ -1,5 +1,4 @@
 import { connectDB } from '@/server/db';
-import { User } from '@/server/models/User';
 import { PatientProfile } from '@/server/models/PatientProfile';
 import { InterventionReport } from '@/server/models/InterventionReport';
 import { serializePatient } from '@/server/serialize';
@@ -47,21 +46,12 @@ export async function POST(request: Request) {
     if (!body[field]) return jsonError(400, `${field} is required.`);
   }
 
-  const chw = await User.findById(session.sub);
-  if (!chw || chw.role !== 'chw') return jsonError(404, 'CHW not found.');
-
   let patientId = generatePatientId();
   // Extremely unlikely collision, but guard anyway.
   // eslint-disable-next-line no-await-in-loop
   while (await PatientProfile.exists({ patientId })) {
     patientId = generatePatientId();
   }
-
-  const user = await User.create({
-    role: 'patient',
-    name: String(body.name),
-    loginCode: patientId,
-  });
 
   const num = (v: unknown) => {
     if (v === undefined || v === null || v === '') return undefined;
@@ -73,8 +63,7 @@ export async function POST(request: Request) {
 
   const patient = await PatientProfile.create({
     patientId,
-    userId: user._id,
-    chwId: chw._id,
+    chwId: session.sub,
 
     name: String(body.name),
     age: Number(body.age),

@@ -26,7 +26,7 @@ export default function ChwLogin() {
     }
     setLoading(true);
     try {
-      const { user, token } = await api.login('chw', email.trim(), password);
+      const { user, token } = await api.login(email.trim(), password);
       if (user && token) {
         await signInChw(user, token);
         router.replace('/chw/dashboard');

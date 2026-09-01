@@ -4,11 +4,9 @@ import { router, usePathname } from 'expo-router';
 import type { DrawerContentComponentProps } from 'expo-router/build/react-navigation/drawer';
 import {
   Activity,
-  ClipboardList,
   HeartPulse,
   Home,
   LogOut,
-  NotebookPen,
   UserPlus,
 } from 'lucide-react-native';
 import type { ReactNode } from 'react';
@@ -26,20 +24,13 @@ const CHW_ITEMS: NavItem[] = [
   { href: '/chw/monitor', label: 'Monitor all', icon: (c) => <Activity size={18} color={c} /> },
 ];
 
-const PATIENT_ITEMS: NavItem[] = [
-  { href: '/patient/home', label: 'Home', icon: (c) => <Home size={18} color={c} /> },
-  { href: '/patient/plan', label: 'My plan', icon: (c) => <ClipboardList size={18} color={c} /> },
-  { href: '/patient/tracker', label: 'Daily tracker', icon: (c) => <NotebookPen size={18} color={c} /> },
-];
-
 export function SidebarContent(props: DrawerContentComponentProps) {
   const { session, signOut } = useSession();
   const pathname = usePathname();
 
-  const isChw = session?.role === 'chw';
-  const items = isChw ? CHW_ITEMS : PATIENT_ITEMS;
-  const name = isChw ? session?.user.name : session?.patient.name;
-  const sectionLabel = isChw ? 'Community Health Worker' : 'Patient';
+  const items = CHW_ITEMS;
+  const name = session?.user.name;
+  const sectionLabel = 'Community Health Worker';
 
   function go(href: string) {
     router.replace(href as never);
@@ -109,4 +100,4 @@ export function SidebarContent(props: DrawerContentComponentProps) {
   );
 }
 
-export const NAV_ITEMS_BY_ROLE = { chw: CHW_ITEMS, patient: PATIENT_ITEMS };
+export const NAV_ITEMS_BY_ROLE = { chw: CHW_ITEMS };

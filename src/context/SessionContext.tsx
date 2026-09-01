@@ -1,30 +1,22 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { setAuthToken } from '@/lib/api';
-import type { PatientProfileDTO, UserDTO } from '@/types';
+import type { UserDTO } from '@/types';
 
 const STORAGE_KEY = 'sathi.session.v2';
 
-interface ChwSession {
+export interface ChwSession {
   role: 'chw';
   user: UserDTO;
   token: string;
 }
 
-interface PatientSession {
-  role: 'patient';
-  patient: PatientProfileDTO;
-  token: string;
-}
-
-export type Session = ChwSession | PatientSession | null;
+export type Session = ChwSession | null;
 
 interface SessionContextValue {
   session: Session;
   isLoading: boolean;
   signInChw: (user: UserDTO, token: string) => Promise<void>;
-  signInPatient: (patient: PatientProfileDTO, token: string) => Promise<void>;
-  updatePatient: (patient: PatientProfileDTO) => Promise<void>;
   signOut: () => Promise<void>;
 }
 
@@ -58,9 +50,6 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       session,
       isLoading,
       signInChw: (user, token) => persist({ role: 'chw', user, token }),
-      signInPatient: (patient, token) => persist({ role: 'patient', patient, token }),
-      updatePatient: (patient) =>
-        persist(session?.role === 'patient' ? { role: 'patient', patient, token: session.token } : session),
       signOut: () => persist(null),
     }),
     [session, isLoading, persist]

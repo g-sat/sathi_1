@@ -4,20 +4,15 @@ import { jsonError, safeJson } from '@/server/http';
 import { codeExpiry, generateNumericCode } from '@/server/auth';
 import { isDevFallbackAllowed, sendVerificationEmail } from '@/server/email';
 
-// POST /api/auth/resend-code — { role, email } issues a fresh verification
-// code if the account hasn't been verified yet.
+// POST /api/auth/resend-code — { email } issues a fresh verification code.
 export async function POST(request: Request) {
   await connectDB();
   const body = await safeJson(request);
-  const role = body.role === 'chw' ? 'chw' : body.role === 'patient' ? 'patient' : null;
-  const email = String(body.email || '')
-    .trim()
-    .toLowerCase();
+  const email = String(body.email || '').trim().toLowerCase();
 
-  if (!role) return jsonError(400, 'A role is required.');
   if (!email) return jsonError(400, 'Email is required.');
 
-  const user = await User.findOne({ email, role });
+  const user = await User.findOne({ email, role: 'chw' });
   if (!user) return jsonError(404, 'No account found for that email.');
   if (user.emailVerified) return jsonError(400, 'This account is already verified.');
 

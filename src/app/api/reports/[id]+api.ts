@@ -6,14 +6,12 @@ import { jsonError, safeJson } from '@/server/http';
 import { withSession } from '@/server/auth';
 
 async function assertCanAccessReport(
-  session: { role: string; sub: string; patientProfileId?: string },
+  session: { sub: string },
   report: { patientId: unknown }
 ) {
   const patient = await PatientProfile.findById(report.patientId).lean();
   if (!patient) return jsonError(404, 'Patient not found.');
-  const isOwnerChw = session.role === 'chw' && String(patient.chwId) === session.sub;
-  const isOwnPatient = session.role === 'patient' && session.patientProfileId === String(patient._id);
-  if (!isOwnerChw && !isOwnPatient) return jsonError(403, 'You are not authorized to access this report.');
+  if (String(patient.chwId) !== session.sub) return jsonError(403, 'You are not authorized to access this report.');
   return null;
 }
 

@@ -2,7 +2,7 @@
 // Kept framework-agnostic (no mongoose imports) so it is safe to import
 // from client bundles.
 
-export type UserRole = 'chw' | 'patient';
+export type UserRole = 'chw';
 
 export interface UserDTO {
   id: string;
@@ -41,7 +41,7 @@ export type ImmigrationStatus =
 export interface PatientProfileDTO {
   id: string;
   patientId: string;
-  userId: string;
+  userId?: string;
   chwId: string;
 
   // Core identity
@@ -282,11 +282,3 @@ export interface DailyLogDTO {
   createdAt: string;
 }
 
-export interface NudgeDTO {
-  id: string;
-  patientId: string;
-  date: string;
-  language: LocalLanguage;
-  message: string;
-  translatedMessage: string;
-}

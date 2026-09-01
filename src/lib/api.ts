@@ -1,13 +1,10 @@
 import type {
   DailyLogDTO,
   InterventionReportDTO,
-  NudgeDTO,
   PatientProfileDTO,
   ReportSectionKey,
   UserDTO,
 } from '@/types';
-
-type Role = 'chw' | 'patient';
 
 let authToken: string | null = null;
 
@@ -43,50 +40,44 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 }
 
 export const api = {
-  // -- Auth -------------------------------------------------------------
+  // -- Auth (CHW only) ---------------------------------------------------
   registerChw: (name: string, email: string, password: string) =>
     request<{ email: string; devCode?: string }>('/api/auth/chw/register', {
       method: 'POST',
       body: JSON.stringify({ name, email, password }),
     }),
 
-  registerPatient: (patientId: string, email: string, password: string) =>
-    request<{ email: string; devCode?: string }>('/api/auth/patient/register', {
+  login: (email: string, password: string) =>
+    request<{ token: string; user?: UserDTO }>('/api/auth/login', {
       method: 'POST',
-      body: JSON.stringify({ patientId, email, password }),
+      body: JSON.stringify({ role: 'chw', email, password }),
     }),
 
-  login: (role: Role, email: string, password: string) =>
-    request<{ token: string; user?: UserDTO; patient?: PatientProfileDTO | null }>('/api/auth/login', {
+  verifyEmail: (email: string, code: string) =>
+    request<{ token: string; user?: UserDTO }>('/api/auth/verify', {
       method: 'POST',
-      body: JSON.stringify({ role, email, password }),
+      body: JSON.stringify({ role: 'chw', email, code }),
     }),
 
-  verifyEmail: (role: Role, email: string, code: string) =>
-    request<{ token: string; user?: UserDTO; patient?: PatientProfileDTO | null }>('/api/auth/verify', {
-      method: 'POST',
-      body: JSON.stringify({ role, email, code }),
-    }),
-
-  resendCode: (role: Role, email: string) =>
+  resendCode: (email: string) =>
     request<{ ok: true; devCode?: string }>('/api/auth/resend-code', {
       method: 'POST',
-      body: JSON.stringify({ role, email }),
+      body: JSON.stringify({ role: 'chw', email }),
     }),
 
-  requestPasswordReset: (role: Role, email: string) =>
+  requestPasswordReset: (email: string) =>
     request<{ ok: true; devCode?: string }>('/api/auth/request-reset', {
       method: 'POST',
-      body: JSON.stringify({ role, email }),
+      body: JSON.stringify({ role: 'chw', email }),
     }),
 
-  resetPassword: (role: Role, email: string, code: string, newPassword: string) =>
+  resetPassword: (email: string, code: string, newPassword: string) =>
     request<{ ok: true }>('/api/auth/reset-password', {
       method: 'POST',
-      body: JSON.stringify({ role, email, code, newPassword }),
+      body: JSON.stringify({ role: 'chw', email, code, newPassword }),
     }),
 
-  // -- Patients -----------------------------------------------------------
+  // -- Patients ----------------------------------------------------------
   listPatients: () =>
     request<{ patients: (PatientProfileDTO & { reportStatus: string })[] }>('/api/patients'),
 
@@ -98,6 +89,7 @@ export const api = {
       body: JSON.stringify(payload),
     }),
 
+  // -- Reports -----------------------------------------------------------
   getReport: (patientId: string, status?: 'draft' | 'published') =>
     request<{ report: InterventionReportDTO | null }>(
       `/api/reports?patientId=${encodeURIComponent(patientId)}${status ? `&status=${status}` : ''}`
@@ -121,19 +113,12 @@ export const api = {
       body: JSON.stringify({ section, instruction }),
     }),
 
+  // -- Logs (read-only for CHW monitoring) --------------------------------
   listLogsForPatient: (patientId: string) =>
     request<{ logs: DailyLogDTO[] }>(`/api/logs?patientId=${encodeURIComponent(patientId)}`),
 
-  listLogsForChw: () => request<{ rows: { log: DailyLogDTO; patient: PatientProfileDTO }[] }>('/api/logs?chwId=me'),
-
-  submitLog: (payload: Record<string, unknown>) =>
-    request<{ log: DailyLogDTO }>('/api/logs', {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    }),
-
-  getNudge: (patientId: string) =>
-    request<{ nudge: NudgeDTO }>(`/api/nudges?patientId=${encodeURIComponent(patientId)}`),
+  listLogsForChw: () =>
+    request<{ rows: { log: DailyLogDTO; patient: PatientProfileDTO }[] }>('/api/logs?chwId=me'),
 };
 
 export { ApiError };

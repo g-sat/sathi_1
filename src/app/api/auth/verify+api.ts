@@ -4,21 +4,17 @@ import { jsonError, safeJson } from '@/server/http';
 import { isCodeExpired } from '@/server/auth';
 import { buildAuthPayload } from '@/server/authResponse';
 
-// POST /api/auth/verify — { role, email, code } confirms the 6-digit code
-// sent by email, marks the account verified, and signs the user in.
+// POST /api/auth/verify — { email, code } confirms the 6-digit code
+// sent by email, marks the account verified, and signs the CHW in.
 export async function POST(request: Request) {
   await connectDB();
   const body = await safeJson(request);
-  const role = body.role === 'chw' ? 'chw' : body.role === 'patient' ? 'patient' : null;
-  const email = String(body.email || '')
-    .trim()
-    .toLowerCase();
+  const email = String(body.email || '').trim().toLowerCase();
   const code = String(body.code || '').trim();
 
-  if (!role) return jsonError(400, 'A role is required.');
   if (!email || !code) return jsonError(400, 'Email and code are required.');
 
-  const user = await User.findOne({ email, role }).select('+verificationCode +verificationCodeExpires');
+  const user = await User.findOne({ email, role: 'chw' }).select('+verificationCode +verificationCodeExpires');
   if (!user) return jsonError(404, 'No account found for that email.');
 
   if (user.emailVerified) {
